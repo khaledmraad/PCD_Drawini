@@ -4,7 +4,8 @@ import { fabricCanvasContext,selectedElementContext } from "../context/context";
 import basicFunctionsClass from "../behavior/basic";
 import EditIcons from "../icons/EditIcons";
 import CanvasAddButton from "./CanvasAddButton";
-import { setSelectionRange } from "@testing-library/user-event/dist/utils";
+import LeftSide from "./LeftSide";
+import RightSide from "./RightSide";
 
 
 
@@ -15,7 +16,6 @@ export default function Main() {
   const { selectedElement ,setSelectedElement} = useContext(selectedElementContext);
   const [basicFunctions, setBasicFunctions] = useState(null);
   const [content, setContent] = useState([]);
-  const [selectedContent, setSelectedContent] = useState([]);
 
   var greenLight={backgroundColor:"green"};
 
@@ -145,15 +145,15 @@ export default function Main() {
       <div className=" w-f  ull max-md:max-w-full">
         <div className="flex">
           <div className="flex flex-col w-[24%] max-md:ml-0 max-md:w-full p-0">
-            <div className="shrink-0 mx-auto max-w-full bg-zinc-300 h-[868px] w-full" id="content">
-              {
-                content.map((x)=>{
-                  return <div key={x.id} onClick={()=>setSelectedElement(basicFunctions.setActive(x.id))} style={selectedElement.id==x.id ? greenLight : null } > {x.name}</div>
-                })
-              }
 
-              
-            </div>
+          <LeftSide
+              content={content}
+              setSelectedElement={setSelectedElement}
+              selectedElement={selectedElement}
+              basicFunctions={basicFunctions}
+              greenLight={greenLight}
+          />
+
 
           </div>
 
@@ -166,7 +166,16 @@ export default function Main() {
             </div>
           </div>
           <div className="flex flex-col w-[24%] max-md:ml-0 max-md:w-full p-0">
-            <div className="shrink-0 mx-auto max-w-full bg-zinc-300 h-[868px] w-full" />
+
+            <div className="shrink-0 mx-auto max-w-full bg-zinc-300 h-[868px] w-full" >
+
+              {selectedElement && selectedElement.id ? 
+              <RightSide selectedElement={selectedElement} /> : 
+              <div>nothing selected</div>
+              }
+
+            </div>
+
           </div>
         </div>
       </div>
