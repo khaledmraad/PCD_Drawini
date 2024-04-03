@@ -67,7 +67,7 @@ export default class BasicFunctionsClass {
 
     const group = new fabric.Group([rect, line1, line2], {
       stroke:"blue",
-      name: "image",
+      name: "imageRect",
       id: ++this.id,
       left: 150,
       top: 100,
@@ -107,6 +107,7 @@ export default class BasicFunctionsClass {
     });
 
     const group = new fabric.Group([circle, line1, line2], {
+      name: "imageCircle",
       id: ++this.id,
       left: 150,
       top: 100,
