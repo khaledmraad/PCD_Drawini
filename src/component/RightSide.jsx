@@ -1,10 +1,11 @@
 import React,{useContext} from "react";
-import { fabricCanvasContext } from "../context/context";
+import { fabricCanvasContext,selectedElementContext } from "../context/context";
 import { fabric } from "fabric";
 
 export default function RightSide({ selectedElement }) {
 
   const { fabCanvas } = useContext(fabricCanvasContext);
+  const { setSelectedElement } = useContext(selectedElementContext);
 
     function addRectImageFromUrl(e){
         var file = e.target.files[0];
@@ -27,6 +28,8 @@ export default function RightSide({ selectedElement }) {
                 fabCanvas.add(img);
 
                 fabCanvas.remove(selectedElement);
+
+                setSelectedElement(img);
                 
                 fabCanvas.setActiveObject(img);
 
@@ -85,6 +88,8 @@ export default function RightSide({ selectedElement }) {
                 fabCanvas.add(fabricImg);
 
                 fabCanvas.remove(selectedElement);
+
+                setSelectedElement(fabricImg);
                 
                 fabCanvas.setActiveObject(fabricImg);
 
@@ -158,11 +163,13 @@ export default function RightSide({ selectedElement }) {
             {["imageRect", "imageCircle"].includes(selectedElement.name) ? 
             
                     selectedElement.name==="imageRect" ?
-                        <input type="file" onChange={(e)=>addRectImageFromUrl(e)}></input>:
-                        <input type="file" onChange={(e)=>addCircleImageFromUrl(e)}></input>
+                        <input type="file" onChange={(e)=>addRectImageFromUrl(e)}  ></input>:
+                        <input type="file" onChange={(e)=>addCircleImageFromUrl(e)} ></input>
                 
 
                 : ""}
+
+            {selectedElement.url ? selectedElement.url : "shit dont exist"}
 
 
 

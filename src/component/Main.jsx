@@ -6,34 +6,60 @@ import EditIcons from "../icons/EditIcons";
 import CanvasAddButton from "./CanvasAddButton";
 import LeftSide from "./LeftSide";
 import RightSide from "./RightSide";
-
+import store from '../context/store';
+import { addItem } from '../context/contentReducer';
+import { useSelector, useDispatch } from 'react-redux';
 
 
 
 export default function Main() {
 
   const { fabCanvas } = useContext(fabricCanvasContext);
+  // const [canvasHeight, setCanvasHeight] = useState(null);
+  // const [canvasWidth, setCanvasWidth] = useState(null);
   const { selectedElement ,setSelectedElement} = useContext(selectedElementContext);
   const [basicFunctions, setBasicFunctions] = useState(null);
-  const [content, setContent] = useState([]);
+  // const [content, setContent] = useState([]);
+  const content=useSelector(state=>state.content);
+  const dispatch=useDispatch();
 
   var greenLight={backgroundColor:"green"};
 
 
   const editIcons=new EditIcons();
 
+
+  // useEffect(() => {
+  //   if (!canvasHeight && !canvasWidth) {
+  //     let height = window.prompt("Enter the height");
+  //     let width = window.prompt("Enter the width");
+  //     setCanvasHeight(Number(height));
+  //     setCanvasWidth(Number(width));
+  //   console.log("done");
+
+  //   }
+  // }, [canvasHeight, canvasWidth]);
+
+  
   useEffect(() => {
+
     if (fabCanvas) {
       setBasicFunctions(new basicFunctionsClass(fabCanvas));
+
+      
     }
   }, [fabCanvas]);
 
+  // const handleAddItem = (idNumber, itemName) => {
+  //   console.log(itemName, idNumber);
+  //   setContent(prevValue => [
+  //     ...prevValue,
+  //     { name: itemName, id: idNumber }
+  //   ]);
+  // };
+
   const handleAddItem = (idNumber, itemName) => {
-    console.log(itemName, idNumber);
-    setContent(prevValue => [
-      ...prevValue,
-      { name: itemName, id: idNumber }
-    ]);
+    dispatch(addItem(idNumber, itemName));
   };
 
 
@@ -112,7 +138,7 @@ export default function Main() {
                     listIdSelected.push(element.id);
                     fabCanvas.remove(element);
                   });
-                setContent(content.filter((x)=> !listIdSelected.includes(x.id)))
+                // setContent(content.filter((x)=> !listIdSelected.includes(x.id)))
               }
               }}
               content={editIcons.delete()}
@@ -132,7 +158,10 @@ export default function Main() {
         </div>
         <div className="flex-auto self-start mt-3 text-5xl text-black max-md:text-4xl" onClick={() => basicFunctions.saveJson()}>
           project name{" "}
+
+
         </div>
+        <input type="file" onChange={(e)=>basicFunctions.readThis(e)} ></input>
         <div className="flex text-5xl text-black max-md:text-4xl">
           <div className="flex-auto my-auto max-md:text-4xl">username </div>
           <div className="shrink-0 bg-red-500 rounded-full h-[59px] w-[59px]" />
@@ -162,7 +191,8 @@ export default function Main() {
 
           <div className="flex flex-col w-[52%] max-md:ml-0 max-md:w-full p-0">
             <div className="shrink-0 mx-auto max-w-full bg-zinc-300 h-[868px] w-full" id="parentDiv">
-              <MainCanvas height={868} width={window.innerWidth * 0.52}></MainCanvas>
+              
+              <MainCanvas height={868} width={window.innerWidth*0.52}></MainCanvas>
             </div>
           </div>
           <div className="flex flex-col w-[24%] max-md:ml-0 max-md:w-full p-0">

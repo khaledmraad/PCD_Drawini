@@ -39,7 +39,7 @@ export default class BasicFunctionsClass {
     this.fabCanvas.renderAll();
   }
 
-  addImageRect() {
+  addImageRect(defX=150,defY=100,defWidth=400,defHeight=200) {
     const rect = new fabric.Rect({
       name: "rectangle",
       width: 300,
@@ -69,8 +69,10 @@ export default class BasicFunctionsClass {
       stroke:"blue",
       name: "imageRect",
       id: ++this.id,
-      left: 150,
-      top: 100,
+      left: defX,
+      top: defY,
+      scaleX:defWidth/300,
+      scaleY:defHeight/100
     });
 
     group.on("selected", () => {
@@ -83,7 +85,7 @@ export default class BasicFunctionsClass {
     console.log("rectangle image added");
   }
 
-  addImageCircle() {
+  addImageCircle(defX=150,defY=100,defRadius=100) {
     const circle = new fabric.Circle({
       name: "circle",
       strokeWidth: 3,
@@ -109,8 +111,10 @@ export default class BasicFunctionsClass {
     const group = new fabric.Group([circle, line1, line2], {
       name: "imageCircle",
       id: ++this.id,
-      left: 150,
-      top: 100,
+      left: defX,
+      top: defY,
+      scaleX:defRadius/100,
+      scaleY:defRadius/100
     });
     group.on("selected", () => {
       this.selectedId=group.id;
@@ -121,8 +125,10 @@ export default class BasicFunctionsClass {
     console.log("circle image added");
   }
 
-  addText() {
+  addText(defX=150,defY=100) {
     const text = new fabric.IText("lorem ipsum", {
+      top:defY,
+      left:defX,
       id: ++this.id,
       name: "text",
       fill: "black",
@@ -137,8 +143,8 @@ export default class BasicFunctionsClass {
     console.log("text added");
   }
 
-  addLine() {
-    const line = new fabric.Line([50, 50, 150, 50], {
+  addLine(defX=50,defY=50,defWidth=100) {
+    const line = new fabric.Line([defX, defY, defX+defWidth, defY], {
       id: ++this.id,
       name: "line",
       fill: "black",
@@ -155,12 +161,14 @@ export default class BasicFunctionsClass {
     console.log("line added");
   }
 
-  addInput() {
+  addInput(defX=150,defY=100,defWidth=150,defHeight=50) {
     const rect = new fabric.Rect({
+      top:defY,
+      left:defX,
       id: ++this.id,
       name: "input",
-      width: 150,
-      height: 50,
+      width: defWidth,
+      height: defHeight,
       strokeWidth: 3,
       fill: "rgba(0,0,0,0)",
       stroke: "black",
@@ -175,7 +183,7 @@ export default class BasicFunctionsClass {
     console.log("input added");
   }
 
-  addLogo() {
+  addLogo(defX=150,defY=100,defWidth=100,defHeight=100) {
     const rect = new fabric.Rect({
       name: "rectangle",
       width: 100,
@@ -200,8 +208,10 @@ export default class BasicFunctionsClass {
     const group = new fabric.Group([rect, triangle], {
       id: ++this.id,
       name: "logo",
-      left: 150,
-      top: 100,
+      left: defX,
+      top: defY,
+      scaleX:defWidth/100,
+      scaleY:defHeight/100
     });
 
     group.on("selected", () => {
@@ -213,7 +223,7 @@ export default class BasicFunctionsClass {
     console.log("logo added");
   }
 
-  addButton() {
+  addButton(defX=150,defY=100,defWidth=150,defHeight=50) {
     const rect = new fabric.Rect({
       name: "rectangle",
       width: 150,
@@ -231,8 +241,10 @@ export default class BasicFunctionsClass {
 
     const group = new fabric.Group([rect, text], {
       id: ++this.id,
-      left: 150,
-      top: 100,
+      left: defX,
+      top: defY,
+      scaleX:defWidth/150,
+      scaleY:defHeight/50
     });
 
     group.on("selected", () => {
@@ -245,7 +257,40 @@ export default class BasicFunctionsClass {
   }
 
   saveJson() {
-    console.log(JSON.stringify(this.fabCanvas));
+    var result = {};
+    this.fabCanvas.forEachObject(obj => {
+        result[obj.name] = {
+            "id": obj.id,
+            "height": obj.height,
+            "width": obj.width,
+            "top": obj.top,
+            "left": obj.left,
+            "url": obj.url ? obj.url : 0  
+        };
+    });
+    console.log(result);
+  }
+
+  readThis(e){
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        const jsonData = JSON.parse(event.target.result);
+        for (let i = 0; i < jsonData.length; i++) {
+          const element = jsonData[i];
+          if(element["type"]==="image") this.addImageRect(element["x"],element["y"],element["width"],element["height"])
+          if(element["type"]==="input") this.addInput(element["x"],element["y"],element["width"],element["height"])
+          if(element["type"]==="text") this.addText(element["x"])
+          if(element["type"]==="button") this.addButton(element["x"],element["y"],element["width"],element["height"])
+          if(element["type"]==="logo") this.addLogo(element["x"],element["y"],element["width"],element["height"])
+          
+        }
+    };
+    reader.readAsText(file);
+
+
+
+
   }
 
 }
