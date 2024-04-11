@@ -7,7 +7,7 @@ import CanvasAddButton from "./CanvasAddButton";
 import LeftSide from "./LeftSide";
 import RightSide from "./RightSide";
 import store from '../context/store';
-import { addItem } from '../context/contentReducer';
+import { addItem ,removeItem} from '../context/contentReducer';
 import { useSelector, useDispatch } from 'react-redux';
 
 
@@ -59,8 +59,11 @@ export default function Main() {
   // };
 
   const handleAddItem = (idNumber, itemName) => {
-    dispatch(addItem(idNumber, itemName));
+    dispatch(addItem({id:idNumber,name: itemName}));
   };
+
+  // dispatch(addItem({id:132,name: "itemName"}));
+  
 
 
 
@@ -73,6 +76,7 @@ export default function Main() {
               func={() => {
                 basicFunctions.addImageRect();
                 handleAddItem(basicFunctions.id, "image rectangle");
+                console.log(content);
               }}
               content={editIcons.rectangleImage()}
             />
@@ -124,7 +128,6 @@ export default function Main() {
               func={() => {
                 basicFunctions.addButton();
                 handleAddItem(basicFunctions.id, "button");
-                console.log("this is the id ",basicFunctions.id);
               }}
               content={editIcons.button()}
             />
@@ -137,8 +140,9 @@ export default function Main() {
                   ao.forEach(element => {
                     listIdSelected.push(element.id);
                     fabCanvas.remove(element);
+                    dispatch(removeItem(element.id));
                   });
-                // setContent(content.filter((x)=> !listIdSelected.includes(x.id)))
+                
               }
               }}
               content={editIcons.delete()}
@@ -176,7 +180,6 @@ export default function Main() {
           <div className="flex flex-col w-[24%] max-md:ml-0 max-md:w-full p-0">
 
           <LeftSide
-              content={content}
               setSelectedElement={setSelectedElement}
               selectedElement={selectedElement}
               basicFunctions={basicFunctions}

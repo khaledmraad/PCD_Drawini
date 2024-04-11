@@ -1,5 +1,6 @@
 import { fabric } from "fabric";
-
+import store from '../context/store'; 
+import { addItem } from '../context/contentReducer'; 
 
 
 export default class BasicFunctionsClass {
@@ -278,11 +279,34 @@ export default class BasicFunctionsClass {
         const jsonData = JSON.parse(event.target.result);
         for (let i = 0; i < jsonData.length; i++) {
           const element = jsonData[i];
-          if(element["type"]==="image") this.addImageRect(element["x"],element["y"],element["width"],element["height"])
-          if(element["type"]==="input") this.addInput(element["x"],element["y"],element["width"],element["height"])
-          if(element["type"]==="text") this.addText(element["x"])
-          if(element["type"]==="button") this.addButton(element["x"],element["y"],element["width"],element["height"])
-          if(element["type"]==="logo") this.addLogo(element["x"],element["y"],element["width"],element["height"])
+          if(element["type"]==="image"){ 
+            this.addImageRect(element["x"],element["y"],element["width"],element["height"]);
+            this.handleAddItem("image rectangle",this.id++);
+          }
+
+          else if(element["type"]==="input") {
+            this.addInput(element["x"],element["y"],element["width"],element["height"]);
+            this.handleAddItem("input",this.id++);
+
+          }
+
+          else if(element["type"]==="text") {
+            this.addText(element["x"]);
+            this.handleAddItem("text",this.id++);
+
+          }
+
+          else if(element["type"]==="button") {
+            this.addButton(element["x"],element["y"],element["width"],element["height"]);
+            this.handleAddItem("button",this.id++);
+
+          }
+
+          else if(element["type"]==="logo") {
+            this.addLogo(element["x"],element["y"],element["width"],element["height"]);
+            this.handleAddItem("logo",this.id++);
+
+          }
           
         }
     };
@@ -292,5 +316,10 @@ export default class BasicFunctionsClass {
 
 
   }
+
+
+  handleAddItem = (itemName,idNumber ) => {
+    store.dispatch(addItem({id:idNumber,name: itemName}));
+  };
 
 }
