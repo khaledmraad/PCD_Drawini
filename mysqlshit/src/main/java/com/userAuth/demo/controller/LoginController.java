@@ -54,12 +54,27 @@ public class LoginController {
     }
 
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<User> getUser(@PathVariable("id") long id) {
-        User user = repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user dont exist"));
+//    @GetMapping("/user/{id}")
+//    public ResponseEntity<User> getUser(@PathVariable("id") long id) {
+//        User user = repository.findById(id)
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user dont exist"));
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(user);
+//
+//
+//    }
 
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+
+    @GetMapping("/user/{email}")
+    public ResponseEntity<String> getUserName(@PathVariable("email") String email ){
+        List<User> userList=repository.findUserByEmail(email);
+
+        if (userList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("user dont exist");
+
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(userList.get(0).getUsername());
 
 
     }

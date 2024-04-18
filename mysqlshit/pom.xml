@@ -63,6 +63,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>bestApp</finalName>
 	</build>
 
 </project>

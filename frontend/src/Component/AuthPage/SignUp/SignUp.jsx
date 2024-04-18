@@ -46,6 +46,8 @@ export default function SignUp(){
 
                     localStorage.setItem('email', loginForm.email)
 
+                    navigate('/maincanvas');
+
 
 
                 }).catch((error) => {
@@ -66,7 +68,6 @@ export default function SignUp(){
                 password: ""
             }))
 
-            navigate('/maincanvas');
 
             setConfirmPassword("")
         }
