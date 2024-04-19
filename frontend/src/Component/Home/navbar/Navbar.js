@@ -38,6 +38,7 @@ function Navbar() {
 				<a href="/#">Blog</a>
 				<a href="/#">About me</a>
 				<a href="/maincanvas">Canvas</a>
+				<a href="/startproject">Start Project</a>
 				{token ?
 					<>
 						<a href="/" onClick={logout}>Logout</a>

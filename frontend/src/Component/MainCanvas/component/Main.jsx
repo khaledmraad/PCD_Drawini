@@ -25,6 +25,10 @@ export default function Main() {
   const content=useSelector(state=>state.content);
   const dispatch=useDispatch();
 
+    const canvasSize=useSelector(state=>state.canvasSize);
+
+
+
   const {token,setToken}=useToken()
     const navigate=useNavigate()
 
@@ -45,9 +49,11 @@ export default function Main() {
   //   }
   // }, [canvasHeight, canvasWidth]);
 
-  
+    var height=canvasSize.height
+    var width=canvasSize.width
   useEffect(() => {
 
+      console.log(height)
     if (fabCanvas) {
       setBasicFunctions(new basicFunctionsClass(fabCanvas));
 
@@ -210,7 +216,7 @@ export default function Main() {
           <div className="flex flex-col w-[52%] max-md:ml-0 max-md:w-full p-0">
             <div className="shrink-0 mx-auto max-w-full bg-zinc-300 h-[868px] w-full" id="parentDiv">
               
-              <MainCanvas height={868} width={window.innerWidth*0.52}></MainCanvas>
+              <MainCanvas height={canvasSize.canvasSize[1]} width={canvasSize.canvasSize[0]}></MainCanvas>
             </div>
           </div>
           <div className="flex flex-col w-[24%] max-md:ml-0 max-md:w-full p-0">

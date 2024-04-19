@@ -8,6 +8,8 @@ export default function MainCanvas(props) {
 
   const { setSelectedElement } = useContext(selectedElementContext);
 
+
+
   useEffect(() => {
     const canvas = new fabric.Canvas(canvasRef.current, {
       width: props.width,

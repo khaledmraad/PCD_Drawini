@@ -14,9 +14,7 @@ function UserCanvas() {
   return (
       <selectedElementContext.Provider value={{selectedElement,setSelectedElement}}>
           <fabricCanvasContext.Provider value={{fabCanvas,setFabCanvas}}>
-              <Provider store={store}>
                   <Main></Main>
-              </Provider>
           </fabricCanvasContext.Provider>
       </selectedElementContext.Provider>
   );
