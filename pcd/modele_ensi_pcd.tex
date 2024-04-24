@@ -1,0 +1,141 @@
+% A LaTeX (non-official) template for ENSI projects reports
+% Copyright (C) 2018 ENSI
+
+% This program is free software; you can redistribute it and/or
+% modify it under the terms of the GNU General Public License
+% as published by the Free Software Foundation; either version 2
+% of the License, or (at your option) any later version.
+
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+
+\documentclass[a4paper,12pt,oneside]{book}
+\usepackage[T1]{fontenc}
+\usepackage{subfiles}
+\usepackage[french]{babel} % If you write in French
+%\usepackage[english]{babel} % If you write in English
+\usepackage{a4wide}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{subfig}
+\newlength\figureheight
+\newlength\figurewidth
+\usepackage{ifthen}
+\usepackage{ifpdf}
+\usepackage{float}
+\ifpdf
+\usepackage[pdftex]{hyperref}
+\else
+\usepackage{hyperref}
+\fi
+\usepackage{color}
+\hypersetup{%
+colorlinks=true,
+linkcolor=black,
+citecolor=black,
+urlcolor=black}
+
+\renewcommand{\baselinestretch}{1.05}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyfoot{}
+\fancyhead[LE,RO]{\bfseries\thepage}
+\fancyhead[RE]{\bfseries\nouppercase{\leftmark}}
+\fancyhead[LO]{\bfseries\nouppercase{\rightmark}}
+\setlength{\headheight}{15pt}
+
+\let\headruleORIG\headrule
+\renewcommand{\headrule}{\color{black} \headruleORIG}
+\renewcommand{\headrulewidth}{1.0pt}
+\usepackage{colortbl}
+\arrayrulecolor{black}
+
+\fancypagestyle{plain}{
+  \fancyhead{}
+  \fancyfoot[C]{\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+\makeatletter
+\def\@textbottom{\vskip \z@ \@plus 1pt}
+\let\@texttop\relax
+\makeatother
+
+\makeatletter
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else%
+  \hbox{}%
+  \thispagestyle{empty}%
+  \newpage%
+  \if@twocolumn\hbox{}\newpage\fi\fi\fi}
+\makeatother
+\usepackage{amsthm}
+\usepackage{amssymb,amsmath}
+\usepackage{array}
+\usepackage{bm}
+\usepackage{multirow}
+\usepackage[footnote]{acronym}
+\usepackage{pdfpages}
+\usepackage[resetlabels,labeled]{multibib}
+\usepackage{url}
+\usepackage{svg}
+
+\newcites{URL}{Netographie}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%
+%%% Page de garde %%%
+%%%%%%%%%%%%%%%%%%
+\includepdf[page={1-1}]{ensi_report_template__1_.pdf}
+%\includepdf[page={1-1}]{pg-pcd-ENSI_ang.pdf} % if english report
+%\includepdf[page={1-1}]{pg-pcd-entrep-ENSI.pdf}% si le pcd est effectué en collaboration avec les industriels
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%% Remerciements, tables de matières, etc %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frontmatter
+\subfile{signature}
+\subfile{Remerciements}
+\clearpage
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+\clearpage
+\chapter*{Liste des sigles et acronymes}
+\begin{acronym}[ACRO5] % Give the longest acronym here
+\acro{ACRO1}{\emph{ACRONYME1}}
+\acro{ACRO2}{\emph{ACRONYME2}}
+\acro{ACRO3}{\emph{ACRONYME3}}
+\acro{ACRO4}{\emph{ACRONYME4}}
+\acro{ACRO5}{\emph{ACRONYME5}}
+\end{acronym}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Corps du rapport et les références %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\mainmatter
+\pagestyle{fancy}
+
+\cleardoublepage
+
+\subfile{introduction}
+\subfile{02-first-chapter}
+\subfile{03-second-chapter}
+\subfile{04-conception}
+\subfile{05-réalisation}
+\subfile{06-conclusion}
+
+\renewcommand{\refname}{Bibliographie}
+\bibliographystyle{apalike}
+\bibliography{references}\addcontentsline{toc}{chapter}{Bibliographie}
+\bibliographystyleURL{plain}
+\bibliographyURL{urls}\addcontentsline{toc}{chapter}{Netographie}
+
+\end{document} 

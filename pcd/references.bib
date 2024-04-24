@@ -1,0 +1,196 @@
+%Il existe de nombreux types d'entrées bibliographiques.
+%Chaque type d'entrée définit des mots-clés obligatoires et des mots-clés optionnels.
+%@article : article d'un journal ou d'un magazine.
+%obligatoire : author, title, journal, year.
+%optionnel : volume, number, pages, month, note.
+%@book : un livre avec un éditeur.
+%obligatoire : author ou editor, title, publisher, year.
+%optionnel : volume ou number, series, address, edition, month, note.
+%@inproceedings : article dans les proceedings d'une conférence.
+%obligatoire : author, title, booktitle, year.
+%optionnel : editor, volume ou number, series, pages, address, month, organization,
+%publisher, note.
+%@unpublished : un document ayant des auteurs et un titre mais non publié.
+%obligatoire : author, title, note.
+%optionnel : month, year.
+%@proceedings : compte-rendu de conférence.
+%obligatoire : title, year.
+%optionnel : editor, volume ou number, series, address, publisher, note, month,
+%organization.
+%@inbook : partie d'un livre.
+%obligatoire : author ou editor, title, chapter et/ou pages, publisher, year.
+%optionnel : volume, number, series, type, address, edition, month, note.
+%@incollection : partie d'un livre ayant son propre titre.
+%obligatoire : author, title, booktitle, publisher, year.
+%optionnel : editor, volume ou number, series, type, chapter, pages, address,
+%edition, month, note.
+%@booklet : livre sans éditeur.
+%obligatoire : title.
+%optionnel : author, howpublished, address, month, year, note.
+%@phdthesis : thèse de doctorat.
+%obligatoire : author, title, school, year.
+%optionnel : type, address, month, note.
+%@manual : documentation technique.
+%obligatoire : title.
+%optionnel : author, organization, address, edition, month, year, note.
+%@techreport : un rapport publié par une institution.
+%obligatoire : author, title, institution, year.
+%optionnel : type, number, address, month, note.
+
+@article{Xarticle,
+    author    = "",
+    title     = "",
+    journal   = "",
+    %volume   = "",
+    %number   = "",
+    %pages    = "",
+    year      = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+
+@book{Xbook,
+    author    = "",
+    title     = "",
+    publisher = "",
+    %volume   = "",
+    %number   = "",
+    %series   = "",
+    %address  = "",
+    %edition  = "",
+    year      = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+@booklet{Xbooklet,
+    %author   = "",
+    title     = "",
+    %howpublished   = "",
+    %address  = "",
+    %year      = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+
+
+@inbook{Xinbook,
+	author	= "",
+	editor	= "",
+	title	= "",
+	chapter	= "",
+	pages	= "",
+	publisher= "",
+	%volume	= "",
+	%number	= "",
+	%series	= "",
+	%type	= "",
+	%address= "",
+	%edition= "",
+	year	= "",
+	%month	= "",
+	%note	= "",
+}
+@incollection{Xincollection,
+	author	= "",
+	title	= "",
+	booktitle= "",
+	publisher= "",
+	%editor	= "",
+	%volume	= "",
+	%number	= "",
+	%series	= "",
+	%type	= "",
+	%chapter= "",
+	%pages	= "",
+	%address= "",
+	%edition= "",
+	year	= "",
+	%month	= "",
+	%note	= "",
+}
+@inproceedings{Xinproceedings,
+	author		= "",
+	title		= "",
+	booktitle	= "",
+	%editor		= "",
+	%volume		= "",
+	%number		= "",
+	%series		= "",
+	%pages		= "",
+	%address	= "",
+	%organization	= "",
+	%publisher	= "",
+	year		= "",
+	%month		= "",
+	%note		= "",
+}
+@manual{Xmanual,
+	title		= "",
+	%author		= "",
+	%organization	= "",
+	%address	= "",
+	%edition	= "",
+	year		= "",
+	%month		= "",
+	%note		= "",
+}
+@phdthesis{Xphdthesis,
+	author		= "",
+	title		= "",
+	school		= "",
+	%address	= "",
+	year		= "",
+	%month		= "",
+	%keywords	= "",
+	%note		= "",
+}
+@proceedings{Xproceedings,
+	title		= "",
+	%editor		= "",
+	%volume		= "",
+	%number		= "",
+	%series		= "",
+	%address	= "",
+	%organization	= "",
+	%publisher	= "",
+	year		= "",
+	%month		= "",
+	%note		= "",
+}
+@techreport{Xtreport,
+    author    = "",
+    title     = "",
+    institution = "",
+    %type     = "",
+    %number   = "",
+    %address  = "",
+    year      = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+@unpublished{Xunpublished,
+	author	= "",
+	title	= "",
+	%year	= "",
+	%month	= "",
+	note	= ""
+}
+
+%exemples
+@Article{ref1,
+author={Auteur1 AND Auteur2},
+journal={Le titre de la revue},
+title={Titre du papier},
+year={2018},
+month={jan},
+pages={24},
+notes={sympathique}
+}
+
+@book
+{ref2,
+author={Auteur},
+title={Titre du livre},
+publisher={Nom de l'éditeur},
+year={2018}
+}
