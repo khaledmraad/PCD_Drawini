@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h1>Choose Your Framework</h1>
+        <form action="/widgets" method="post" enctype="multipart/form-data">
+            <div>
+                <label for="technology">Select Framework:</label>
+                <select id="technology" name="technology">
+                    <option value="html">HTML</option>
+                    <option value="angular">Angular</option>
+                    <option value="react_js">React JS</option>
+                    <option value="react_ts">React TS</option>
+                </select>
+            </div>
+            <div>
+                <input type="file" id="img" name="img" accept="image/png,image/jpg,image/jpeg">
+            </div>
+            <div>
+                <input type="submit" name="Edit" value="Edit">
+                <input type="submit" name="Download" value="Download">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

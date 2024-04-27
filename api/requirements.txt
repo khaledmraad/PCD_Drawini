@@ -1,0 +1,11 @@
+Flask
+flask-cors
+numpy 
+matplotlib
+opencv-python 
+scikit-learn
+pillow
+matplotlib
+rembg
+tensorflow==2.15.0
+easyocr
