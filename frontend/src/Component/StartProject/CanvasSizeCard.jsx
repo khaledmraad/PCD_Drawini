@@ -20,9 +20,9 @@ export default function CanvasSizeCard(props) {
     }
 
     return (
-        <Card sx={{ maxWidth: 345 }} className={props.class} onClick={()=>handleSetCanvasSize(900,800)}>
+        <Card sx={{ width: 345,border: 1 ,borderColor: 'grey.500'  }} className={props.class} onClick={()=>handleSetCanvasSize(900,800)}>
             <CardActionArea>
-                <div>
+                <div className="ml-2">
                     size
                 </div>
                 <CardContent>
@@ -30,8 +30,7 @@ export default function CanvasSizeCard(props) {
                         {props.content}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Lizards are a widespread group of squamate reptiles, with over 6,000
-                        species, ranging across all continents except Antarctica
+                        {props.description}
                     </Typography>
                 </CardContent>
             </CardActionArea>

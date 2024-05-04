@@ -169,7 +169,7 @@ export default function RightSide({ selectedElement }) {
 
                 : ""}
 
-            {selectedElement.url ? selectedElement.url : "shit dont exist"}
+            {selectedElement.url ? selectedElement.url : "URL no set"}
 
 
 

@@ -3,6 +3,8 @@ import { FaFacebookF, FaGithub, FaGooglePlusG, FaLinkedinIn, FaTable } from "rea
 import axios from "axios";
 import Swal from "sweetalert2";
 import {useNavigate} from "react-router-dom";
+import store from "../../MainCanvas/context/store";
+import {setUserName} from "../../MainCanvas/context/userNameReducer";
 
 
 export default function SignUp(){
@@ -16,6 +18,8 @@ export default function SignUp(){
     const navigate=useNavigate();
 
     const [confirmPass,setConfirmPassword]=useState("")
+
+
 
     function btnSignUp(event) {
         if (loginForm.password!==confirmPass){
@@ -45,8 +49,9 @@ export default function SignUp(){
                     });
 
                     localStorage.setItem('email', loginForm.email)
+                    store.dispatch(setUserName(loginForm.userName))
 
-                    navigate('/maincanvas');
+                    navigate('/startproject');
 
 
 

@@ -1,15 +1,16 @@
 import React from "react";
 
 
-export default function CanvasAddButton({ func, content, basicFunctions }) {
+export default function CanvasAddButton({ func, content, name,basicFunctions }) {
     return (
       <button
-        className="shrink-0 bg-red-500 rounded-full h-[59px] w-[59px] flex items-center justify-center"
+        className="px-2 m-0  h-12  bg-gray-400 hover:bg-gray-500 text-gray-800 font-bold rounded inline-flex items-center"
         onClick={() => {
             func();
         }}
       >
-        {content}
+        <div className="  ">{content}</div> <h1 className="mx-2 text-left">{name}</h1>
+
       </button>
     );
   }

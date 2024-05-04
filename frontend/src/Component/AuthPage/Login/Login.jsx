@@ -1,18 +1,18 @@
-import React, {useState} from "react";
-import { FaFacebookF, FaGithub, FaGooglePlusG, FaLinkedinIn, FaTable } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { FaFacebookF, FaGithub, FaGooglePlusG, FaLinkedinIn } from "react-icons/fa";
 import axios from "axios";
 import Swal from "sweetalert2";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useToken from "../../useToken";
+import { setUserName } from "../../MainCanvas/context/userNameReducer"; // Check the correct path
+import { useDispatch, useSelector } from "react-redux";
 
-
-
-export default function Login(){
-
-    const [profileData, setProfileData] = useState(null);
+export default function Login() {
+    const dispatch = useDispatch();
+    const userName = useSelector(state => state.userName);
     const [formData, setFormData] = useState({
-        email: '',
-        password: ''
+        email: "",
+        password: ""
     });
 
     const handleInputChange = (event) => {
@@ -21,59 +21,61 @@ export default function Login(){
             ...formData,
             [name]: value
         });
-        console.log(formData)
     };
 
     const navigate = useNavigate();
 
-    const {token,setToken}=useToken()
+    const { token, setToken } = useToken(); // Make sure useToken is correctly implemented
 
-    const handleSubmit = async (event) => {
+    useEffect(() => {
+        console.log("the username : ", userName);
+    }, [userName]);
 
-        axios({
-            method: "POST",
-            url:"http://localhost:4444/login",
-            data:{
-                email: formData.email,
-                password: formData.password,
-            }
-        })
-            .then((response) => {
-                Swal.fire({
-                    title: "You logged in successfully",
-                    text: "You will be redirected to Main page ",
-                    icon: "success"
-                });
-                setToken(formData.email)
-                localStorage.setItem('email', formData.email);
-                navigate('/maincanvas');
-
-
-            }).catch((error) => {
-            if (error.response) {
-                if (error.response.status === 404) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Email or password are incorrect",
-                    });
-                }
-            }
-        })
-
-        setFormData(({
-            email: "",
-            password: ""}))
-
-
-
-        event.preventDefault()
-
+    const handleUserName = async (email) => {
+        try {
+            const url = "http://localhost:4444/user/" + email;
+            const response = await axios.get(url);
+            const newName = response.data;
+            dispatch(setUserName({ newName: newName }));
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
 
+        try {
+            const response = await axios.post("http://localhost:4444/login", {
+                email: formData.email,
+                password: formData.password,
+            });
 
+            Swal.fire({
+                title: "You logged in successfully",
+                text: "You will be redirected to Main page ",
+                icon: "success"
+            });
 
+            setToken(formData.email);
+            localStorage.setItem('email', formData.email);
+            await handleUserName(formData.email);
+            navigate('/startproject');
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Email or password are incorrect",
+                });
+            }
+        }
+
+        setFormData({
+            email: "",
+            password: ""
+        });
+    };
 
     return (
         <>
@@ -87,10 +89,10 @@ export default function Login(){
                         <a href="#" className="icon"><i className=""><FaLinkedinIn/></i></a>
                     </div>
                     <span>or use your email and password</span>
-                    <input type="email" placeholder="Email"  id="email" name="email" value={formData.email} onChange={handleInputChange} required/>
+                    <input type="email" placeholder="Email" id="email" name="email" value={formData.email} onChange={handleInputChange} required/>
                     <input type="password" placeholder="Password" id="password" name="password" value={formData.password} onChange={handleInputChange} required/>
                     <a href="#">Forgot Your Password?</a>
-                    <button>Sign In</button>
+                    <button type="submit">Sign In</button>
                 </form>
             </div>
         </>
