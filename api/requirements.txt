@@ -9,3 +9,7 @@ matplotlib
 rembg
 tensorflow==2.15.0
 easyocr
+opencv-python-headless
+seaborn
+pdf2image
+scipy
