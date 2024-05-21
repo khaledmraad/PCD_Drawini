@@ -1,4 +1,4 @@
-import React from "react";
+import {useState, createRef, React} from "react";
 import CanvasAddButton from "../MainCanvas/component/CanvasAddButton";
 import CanvasSizeCard from "./CanvasSizeCard";
 import {Dialog} from "@mui/material";
@@ -11,10 +11,69 @@ import {FaDownload, FaRegTrashAlt} from "react-icons/fa";
 
 export default function StartProject(){
 
-    const uploadRef = React.createRef();
+    //const uploadRef = React.createRef();
 
     const userName=useSelector(state=>state.userName);
+  
+    const [image, setImage] = useState(null);
+    const [technology, setTechnology] = useState('react_ts');
+    const [response, setResponse] = useState('');
 
+    const handleImageChange = (e) => {
+        setImage(e.target.files[0]);
+    };
+
+    const handleTechnologyChange = (e) => {
+        setTechnology(e.target.value);
+    };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        if (!image) {
+            alert('Please select an image');
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append('img', image);
+        formData.append('technology', technology);
+    
+        try {
+            const response = await fetch('http://localhost:5001/api/downloads', {
+                method: 'POST',
+                body: formData,
+            });
+    
+            if (response.ok) {
+                const contentType = response.headers.get('Content-Type');
+    
+                if (contentType && contentType.startsWith('application/json')) {
+                    // Handle JSON response
+                    const data = await response.json();
+                    alert(data.message || 'Download successful');
+                } else {
+                    // Handle ZIP file or other binary data
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = `${technology}_app.zip`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                }
+            } else {
+                // Handle error response
+                const text = await response.text();
+                alert(text);  // Display the error message
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Network error');  // Display a generic network error message
+        }
+    };
+    
     return (
         <>
             <nav
@@ -94,7 +153,7 @@ export default function StartProject(){
 
                             </a>
                             <button className="rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group px-4"  title="Delete Project"><FaRegTrashAlt style={{ color: 'white'}}/></button>
-                            <button className="rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group px-4" title="Download Project Code"><FaDownload  style={{ color: 'white'}}/></button>
+                            <button className="rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group px-4" title="Download Project Code" onClick={handleSubmit}><FaDownload  style={{ color: 'white'}}/></button>
 
                         </li>
 
@@ -129,10 +188,24 @@ export default function StartProject(){
 
             <div className="p-4 sm:ml-64">
                 <div className="p-4 rounded-lg dark:border-gray-700 mt-14">
+
                     <h1 className="text-[#000000] text-xl font-bold">Import From Images : </h1>
 
                     <div class="max-w-2xl mx-auto">
-
+                    <form onSubmit={handleSubmit}>
+                    <div className="flex items-center justify-center w-full mt-4">
+                            {/* Barre de sélection pour la technologie */}
+                            <select
+                                className="border border-gray-300 rounded-lg p-2"
+                                value={technology}
+                                onChange={handleTechnologyChange}
+                            >
+                                <option value="react_ts">React TypeScript</option>
+                                <option value="react_js">React JavaScript</option>
+                                <option value="angular">Angular</option>
+                                <option value="html">HTML/CSS</option>
+                            </select>
+                        </div>
                         <div class="flex items-center justify-center w-full">
                             <label for="dropzone-file"
                                    class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -147,10 +220,13 @@ export default function StartProject(){
                                     <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX.
                                         800x400px)</p>
                                 </div>
-                                <input onChange={() => console.log("jdchqjsdjkhcb")} id="dropzone-file" type="file"
-                                       class="hidden"/>
+                                <input //onChange={() => console.log("jdchqjsdjkhcb")} 
+                                        id="dropzone-file" type="file" accept="image/*"
+                                       class="hidden" onChange={handleImageChange}/>
                             </label>
-                        </div>
+                            
+                            
+                        </div></form>
                     </div>
                 </div>
 
