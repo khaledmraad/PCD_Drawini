@@ -16,7 +16,7 @@ export default function StartProject(){
     const userName=useSelector(state=>state.userName);
   
     const [image, setImage] = useState(null);
-    const [technology, setTechnology] = useState('react_ts');
+    const [technology, setTechnology] = useState('html');
     const [response, setResponse] = useState('');
 
     const handleImageChange = (e) => {
@@ -199,11 +199,11 @@ export default function StartProject(){
                                 className="border border-gray-300 rounded-lg p-2"
                                 value={technology}
                                 onChange={handleTechnologyChange}
-                            >
-                                <option value="react_ts">React TypeScript</option>
-                                <option value="react_js">React JavaScript</option>
-                                <option value="angular">Angular</option>
+                            >                                
                                 <option value="html">HTML/CSS</option>
+                                <option value="react_js">React JavaScript</option>
+                                <option value="react_ts">React TypeScript</option>
+                                <option value="angular">Angular</option>
                             </select>
                         </div>
                         <div class="flex items-center justify-center w-full">
