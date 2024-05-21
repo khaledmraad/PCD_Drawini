@@ -4,10 +4,12 @@
     box-sizing: border-box;
 }
 footer{
-    background-color: #512da8;
+    background-color: #1f2833;
     position: fixed;
     bottom: 0;
     width: 100%;
+    z-index: 1000;
+
     
            
 }
@@ -28,7 +30,7 @@ footer{
 }
 .socialIcons a i{
     font-size: 2em;
-    color: #512da8
+    color: #1f2833
     ;
     opacity: 0,9;
 }
@@ -43,6 +45,8 @@ footer{
 }
 .footerNav{
     margin: 10px 0;
+    
+
 }
 .footerNav ul{
     display: flex;
@@ -50,7 +54,7 @@ footer{
     list-style-type: none;
 }
 .footerNav ul li a{
-    color:white;
+    color: #66fcf1;;
     margin: 20px;
     text-decoration: none;
     font-size: 1.3em;
@@ -62,12 +66,12 @@ footer{
     opacity: 1;
 }
 .footerBottom{
-    background-color: #512da8;
+    background-color: #1f2833;
     padding: 5px;
     text-align: center;
 }
 .footerBottom p{
-    color: white;
+    color:  #66fcf1;;
 }
 .designer{
     opacity: 0.7;
