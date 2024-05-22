@@ -73,6 +73,42 @@ export default function StartProject(){
             alert('Network error');  // Display a generic network error message
         }
     };
+    const handleChange = async (e) => {
+        e.preventDefault();
+    
+        if (!image) {
+            alert('Please select an image');
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append('img', image);
+        formData.append('technology', technology);
+    
+        try {
+            const response = await fetch('http://localhost:5001/api/change', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json',
+                },
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data); // Display the JSON data in the console
+                alert(JSON.stringify(data, null, 2)); // Alert the JSON data in a formatted string
+            } else {
+                // Handle error response
+                const text = await response.text();
+                alert(text);  // Display the error message
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Network error');  // Display a generic network error message
+        }
+    };
+    
     
     return (
         <>
@@ -226,7 +262,10 @@ export default function StartProject(){
                             </label>
                             
                             
-                        </div></form>
+                        </div><br></br><div class="mb-4"><button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 border border-gray-700 rounded" onClick={handleChange}>
+  Modify
+</button>
+</div></form>
                     </div>
                 </div>
 
