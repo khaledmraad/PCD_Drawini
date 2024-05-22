@@ -25,7 +25,7 @@ def create_widget_objects(widgets):
 def get_module(module_name):
     return importlib.import_module(f'views.{module_name}')
 
-@app.route('/api/downloads', methods=['POST','GET'])
+@app.route('/api/generate', methods=['POST','GET'])
 def get_widgets():
     if 'img' not in request.files:
         return jsonify({"error": "No image part"}), 400
@@ -88,10 +88,47 @@ def change_widgets():
     module = get_module(module_name)
     
     return  widgets_info
+@app.route('/api/json', methods=['POST','GET'])
+def get_json():
+    widgets_info = request.get_json()
+    if not widgets_info:
+        return jsonify({"error": "No JSON data provided"}), 400
+    
+    return widgets_info
+@app.route('/api/downloads', methods=['POST','GET'])
+def download_json():
+    widgets_info = request.get_json()
+    if not widgets_info:
+        return jsonify({"error": "No JSON data provided"}), 400
+    
+    
+    technology = request.form.get('technology')
+    if not technology:
+        return jsonify({"error": "Technology not specified"}), 400
+    
+    module_name = {
+        'html': 'html',
+        'angular': 'angular',
+        'react_js': 'react_js',
+        'react_ts': 'react_ts'
+    }.get(technology, None)
+    
+    if not module_name:
+        return jsonify({"error": "Invalid technology selected"}), 400
+    
+    module = get_module(module_name)
+    
+    widget_objects = create_widget_objects(widgets_info)
+    
+    code = module.generate_components(widget_objects)
+    return module.download_code(code)
+
+
+    
 
 @app.route('/')
 def hello_world():
     return jsonify({"message": "Hello from backend"})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)
