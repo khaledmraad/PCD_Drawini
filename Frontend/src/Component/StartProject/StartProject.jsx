@@ -39,7 +39,7 @@ export default function StartProject(){
         formData.append('technology', technology);
     
         try {
-            const response = await fetch('http://localhost:5001/api/downloads', {
+            const response = await fetch('http://localhost:5001/api/generate', {
                 method: 'POST',
                 body: formData,
             });
@@ -231,16 +231,7 @@ export default function StartProject(){
                     <form onSubmit={handleSubmit}>
                     <div className="flex items-center justify-center w-full mt-4">
                             {/* Barre de sélection pour la technologie */}
-                            <select
-                                className="border border-gray-300 rounded-lg p-2"
-                                value={technology}
-                                onChange={handleTechnologyChange}
-                            >                                
-                                <option value="html">HTML/CSS</option>
-                                <option value="react_js">React JavaScript</option>
-                                <option value="react_ts">React TypeScript</option>
-                                <option value="angular">Angular</option>
-                            </select>
+
                         </div>
                         <div class="flex items-center justify-center w-full">
                             <label for="dropzone-file"
@@ -262,10 +253,31 @@ export default function StartProject(){
                             </label>
                             
                             
-                        </div><br></br><div class="mb-4"><button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 border border-gray-700 rounded" onClick={handleChange}>
-  Modify
-</button>
-</div></form>
+                        </div><br></br>
+                        <div class="mb-4 flex items-center justify-center">
+                            <button
+                                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 border border-gray-700 rounded"
+                                onClick={handleChange}>
+                                Modify
+                            </button>
+                            <select
+                                className="border border-gray-300 rounded-lg p-2 mx-2"
+                                value={technology}
+                                onChange={handleTechnologyChange}
+                            >
+                                <option value="html">HTML/CSS</option>
+                                <option value="react_js">React JavaScript</option>
+                                <option value="react_ts">React TypeScript</option>
+                                <option value="angular">Angular</option>
+                            </select>
+
+                            <button
+                                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 border border-gray-700 rounded"
+                                onClick={handleSubmit}>
+                                Download
+                            </button>
+                        </div>
+                    </form>
                     </div>
                 </div>
 
