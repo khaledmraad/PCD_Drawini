@@ -16,7 +16,7 @@ services:
 
   flask_api:
     build:
-      context: ./api  
+      context: ./FlaskBackend  
       dockerfile: Dockerfile
     restart: on-failure
     ports:
@@ -30,7 +30,7 @@ services:
     depends_on:
       - mysqldb
     build:
-      context: ./mysqlshit
+      context: ./SpringBackend
       dockerfile: Dockerfile
     restart: on-failure
     env_file: ./.env.docker
@@ -47,7 +47,7 @@ services:
 
   react_l:
     build:
-      context: ./frontend
+      context: ./Frontend
     ports:
       - "3000:3000"
     environment:
