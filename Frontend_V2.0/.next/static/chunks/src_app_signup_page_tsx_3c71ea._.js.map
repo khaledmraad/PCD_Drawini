@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sections": [
+    {"offset": {"line": 5, "column": 0}, "map": {"version":3,"sources":["/turbopack/[project]/src/app/signup/page.tsx"],"sourcesContent":["'use client';\n\nimport Link from \"next/link\";\n\nimport { Metadata } from \"next\";\nimport { useState,ChangeEvent } from \"react\";\nimport Signup from \"@/components/Signp\";\n\n\nexport const metadata: Metadata = {\n  title: \"Sign Up Page | Free Next.js Template for Startup and SaaS\",\n  description: \"This is Sign Up Page for Startup Nextjs Template\",\n  // other metadata\n};\n\nconst SignupPage = () => {;\n\n    return (\n      <Signup></Signup>\n    )\n\n};\n\nexport default SignupPage;\n"],"names":[],"mappings":";;;;;;;AAAA;;;AASO,MAAM,WAAqB;IAChC,OAAO;IACP,aAAa;AAEf;AAEA,MAAM,aAAa;IAEf,qBACE;;;;;AAGN;KANM;uCAQS"}},
+    {"offset": {"line": 30, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}
