@@ -2,6 +2,7 @@ package com.authapi.jwt_auth.auth.registration;
 
 
 import com.authapi.jwt_auth.auth.AuthenticationService;
+import com.authapi.jwt_auth.auth.emailSender.EmailService;
 import com.authapi.jwt_auth.auth.registration.token.ConfirmationToken;
 import com.authapi.jwt_auth.auth.registration.token.ConfirmationTokenService;
 import com.authapi.jwt_auth.config.JwtService;
@@ -13,7 +14,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -28,6 +31,8 @@ public class RegistrationService {
     final UserRepository repository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final EmailService emailService;
 
 
 
@@ -76,6 +81,12 @@ public class RegistrationService {
 
         confirmationTokenService.saveConfirmationToken(
                 confirmationToken);
+
+        Context context = new Context();
+        context.setVariable("token", token);
+
+        emailService.sendEmailWithHtmlTemplate(request.getEmail(), "wtf", "email-template",(Context) context);
+
 
 
         return token;

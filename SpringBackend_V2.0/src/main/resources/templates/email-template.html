@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Template</title>
+</head>
+<body>
+<h1>Confirm you account pls</h1>
+<a th:href="'http://localhost:8080/api/v1/auth/register/confirm?token='+${token}">Confirm Account</a>
+
+</body>
+</html>
