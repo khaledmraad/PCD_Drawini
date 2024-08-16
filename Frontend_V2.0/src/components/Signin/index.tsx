@@ -33,6 +33,8 @@ export default function Signin(){
         const url = 'http://localhost:8080/api/v1/auth/authenticate';
       
         const data = loginForm;
+        // console.log(data);
+        
       
         try {
           const response = await axios.post(url, data, {
@@ -40,13 +42,39 @@ export default function Signin(){
               'Content-Type': 'application/json'
             }
           });
+          console.log(response.data);
+          
           if( response.data["responseStatus"]=="401"){
+            console.log(response.data);
+            
             setSigninError(true);
             setErrorMessage("Confirm your email from the email box");
               
           }
+          if( response.data["responseStatus"]=="404"){
+            console.log(response.data);
+            
+            setSigninError(true);
+            setErrorMessage("Email or Password not correct");
+              
+          }
+
+          if( response.data["responseStatus"]=="202"){
+            console.log(response.data);
+            
+            setSigninError(true);
+            setErrorMessage("ur logged in");
+            localStorage.setItem("auth_token",response.data["token"]);
+
+            
+            
+          
+
+          }
 
         } catch (error) {
+          console.log(error.message);
+          
             setSigninError(true);
             setErrorMessage("Email or Password is incorrect");
         }
@@ -157,7 +185,6 @@ export default function Signin(){
                         <input
                           type="password"
                           name="password"
-                          value={loginForm.password}
                             onChange={handleChange}
                           placeholder="Enter your Password"
                           className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
