@@ -12,8 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -29,7 +31,7 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
-
+    private final PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
 
 
@@ -42,16 +44,37 @@ public class AuthenticationService {
 
         System.out.println(request.getEmail());
         var testUserExists = repository.findByEmail(request.getEmail());
-        var user = testUserExists
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        // Check if user exists with the provided email
+
 
 
         if (!testUserExists.isPresent()) {
             return new AuthenticationResponse().builder()
-                    .token("ur not real")
+                    .token("user dont exist")
                     .responseStatus(404)
                     .build();
         };
+
+        User user = testUserExists.orElseThrow(() ->
+                new UsernameNotFoundException("User not found with email: " + request.getEmail()));
+
+        System.out.println(request.getPassword());
+        System.out.println(passwordEncoder.encode(request.getPassword()));
+        System.out.println(user.getPassword());
+        // Now check if the password matches
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+//            throw new UsernameNotFoundException("Invalid password");
+
+            return new AuthenticationResponse().builder()
+                    .token("password not correct")
+                    .responseStatus(404)
+                    .build();
+
+        }
+
+
+
 
         if (user.getEnable()==0) {
             /*throw new UsernameNotFoundException("User not found");*/

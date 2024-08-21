@@ -12,6 +12,7 @@ import com.authapi.jwt_auth.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
@@ -30,7 +31,7 @@ public class RegistrationService {
 
     final UserRepository repository;
 
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
     private final EmailService emailService;
 
@@ -45,6 +46,8 @@ public class RegistrationService {
             throw new IllegalStateException("email is not valid");
 
         }
+
+        System.out.println(request.getPassword());
 
         var user= User.builder()
                 .firstname(request.getFirstname())
