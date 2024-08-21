@@ -35,7 +35,7 @@ export default function Signup(){
     async function btnSignup(event: React.FormEvent<HTMLFormElement>): Promise<boolean> {
       event.preventDefault(); 
     
-      const url = 'http://10.0.0.4:8080/api/v1/auth/register';
+      const url = 'http://4.180.6.234:8080/api/v1/auth/register';
     
       const data = loginForm;
     

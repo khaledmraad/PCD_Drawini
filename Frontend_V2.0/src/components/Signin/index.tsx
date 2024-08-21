@@ -30,7 +30,7 @@ export default function Signin(){
     async function btnSignup(event: React.FormEvent<HTMLFormElement>): Promise<boolean> {
         event.preventDefault(); 
       
-        const url = 'http://10.0.0.4:8080/api/v1/auth/authenticate';
+        const url = 'http://4.180.6.234:8080/api/v1/auth/authenticate';
       
         const data = loginForm;
         // console.log(data);
