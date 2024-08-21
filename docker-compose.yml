@@ -10,7 +10,22 @@ services:
           - NODE_ENV=development
         networks:
           - drawini-net
+    postgres:
+        image: postgres:latest
+        container_name: postgres_db
+        environment:
+          POSTGRES_DB: pcd
+          POSTGRES_USER: khaled
+          POSTGRES_PASSWORD: 1234
+        ports:
+          - "5432:5432"
+        volumes:
+          - postgres_data:/var/lib/postgresql/data
+        networks:
+          - drawini-net
 
+volumes:
+    postgres_data:
 networks:
     drawini-net:
 
