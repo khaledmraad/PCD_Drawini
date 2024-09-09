@@ -1,49 +1,51 @@
-node {
-   
-   //Declare a global variable for mvnHome
+pipeline {
+    agent any
 
-   stage('Version') { 
+    tools{
+        maven 'M3'
+        git 'git'
+    }
 
-	  //build job: 'Version Check'
-          
-   }
-
-   stage('Environment') {
-       
-       // build job: 'Enviro-Check'
-       
-   }
-
-   stage('Document') {
-   
-	  //build job: 'Generate-JavaDoc', parameters: [booleanParam(name: 'generate_javadoc', value: false), stringParam(name: 'javadoc_location', value: 'C:\\_javadoc00')]
-
-   }
-
-   stage('Compile'){
-  
-       // build job: 'Compile-RPS'
-   }
-   
-   stage('Acceptance') {
-       
-         //def response = input message: 'UAT Tests',   parameters: [choice(choices: 'Pass\nFail', description: 'Proceed or Abort?', name: 'Pass or Fail?')]
-
-   }
-   
-   stage('Almost Done!') {
-      def response = input message: 'Whatcha think?', parameters: [choice(choices: 'Yes\nNo', description: 'Proceed or Abort?', name: 'Wasn\'t that cool?')]
+    stages {
+        stage('cloning repo') {
+            steps {
+                git branch: 'main', url:'https://github.com/khaledmraad/PCD_Drawini.git'
+            }
+        }
         
-      if (response=="Yes") {
-         echo "I agree!"
-      } else {
-         echo "You are hard to please."
-      }
-   }
-	
-   stage('Static Code Analysis'){
-       build job: 'static-code-analysis'
-   }
-	
-
+        stage('compile and test') {
+            steps {
+                sh script:'''
+                  #!/bin/bash
+                  cd SpringBackend_V2.0
+                  mvn -Dmaven.test.failure.ignore clean package
+                '''
+            }
+        }
+        
+        
+        stage('create docker image') {
+            steps {
+                sh script:'''
+                  #!/bin/bash
+                  cd SpringBackend_V2.0
+                  docker build -t khaledmraadtn/pcd_drawini:latest ./Dockerfile2
+                '''
+            }
+        }
+        
+        stage('deploy to docker hub') {
+            steps {
+                script {
+                   withCredentials([usernamePassword(credentialsId: 'docker_cred', passwordVariable: 'password', usernameVariable: 'username')]) {
+                      sh "docker login -u ${username} -p ${password}"
+                      sh "docker push khaledmraad/pcd_drawini:latest "
+                   }
+                }
+            }
+        }
+        
+        
+    }
 }
+
