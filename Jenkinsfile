@@ -28,8 +28,9 @@ pipeline {
             steps {
                 sh script:'''
                   #!/bin/bash
+                  pwd
                   cd SpringBackend_V2.0
-                  docker build -t khaledmraadtn/pcd_drawini:latest ./Dockerfile2
+                  docker build -t khaledmraadtn/pcd_drawini:latest -f ./Dockerfile2 .
                 '''
             }
         }
@@ -39,7 +40,7 @@ pipeline {
                 script {
                    withCredentials([usernamePassword(credentialsId: 'docker_cred', passwordVariable: 'password', usernameVariable: 'username')]) {
                       sh "docker login -u ${username} -p ${password}"
-                      sh "docker push khaledmraad/pcd_drawini:latest "
+                      sh "docker push khaledmraadtn/pcd_drawini:latest "
                    }
                 }
             }
