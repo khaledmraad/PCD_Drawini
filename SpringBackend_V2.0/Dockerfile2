@@ -1,4 +1,4 @@
-FROM openjdk:3.8.5-openjdk-17
+FROM openjdk:openjdk-17
 
 WORKDIR /jaava-app
 COPY target/JWT_Auth-0.0.1-SNAPSHOT.jar app.jar
