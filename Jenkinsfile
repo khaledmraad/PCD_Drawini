@@ -25,24 +25,35 @@ pipeline {
             }
         }
         
-        stage('SonarQube code analysis') {
+        stage('trigger Frontend Pipeline') {
             steps {
-                
-                withSonarQubeEnv('sonar') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=PCD_Drawini \
-                    -Dsonar.projectKey=PCD_Drawini '''
-                }
-                
-            
+                build job: "PCD_Drawini_fontend", wait: false
             }
-       }
-       stage("quality gate"){
-           steps {
-                script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube' 
-                }
-            } 
         }
+
+        
+        stage('Package') {
+            steps {
+                sh 'cd SpringBackend_V2.0 && mvn package  -Dmaven.test.skip=true'    
+            }
+        }
+        
+        stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('sonar') {
+                    sh 'cd SpringBackend_V2.0 && mvn package -Dmaven.test.skip=true sonar:sonar -Dsonar.projectName="Drawini Spring Backend" '
+                }
+            }
+        }
+
+
+    //   stage("quality gate"){
+    //       steps {
+    //             script {
+    //                 waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube' 
+    //             }
+    //         } 
+    //     }
 
 
         
@@ -63,7 +74,7 @@ pipeline {
                   #!/bin/bash
                   pwd
                   cd SpringBackend_V2.0
-                  docker build -t khaledmraadtn/pcd_drawini:latest -f ./Dockerfile2 .
+                  docker build -t khaledmraadtn/drawini_spring_backend:latest -f ./Dockerfile2 .
                 '''
             }
         }
@@ -73,7 +84,7 @@ pipeline {
                 script {
                    withCredentials([usernamePassword(credentialsId: 'docker_cred', passwordVariable: 'password', usernameVariable: 'username')]) {
                       sh "docker login -u ${username} -p ${password}"
-                      sh "docker push khaledmraadtn/pcd_drawini:latest "
+                      sh "docker push khaledmraadtn/drawini_spring_backend:latest "
                    }
                 }
             }
