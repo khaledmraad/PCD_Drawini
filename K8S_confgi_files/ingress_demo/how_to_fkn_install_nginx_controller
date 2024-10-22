@@ -1,0 +1,19 @@
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace
+
+to check
+kb get po,svc -n ingress-nginx
+
+create a simple to redirect the traffic to , in this case  its ascode-example-deployment.yaml and its service ofc
+
+
+to check everything is  good we can run na port forwarding to our localhost
+kubectl port-forward service/nginx-service 8080:8080 -n ascode-example
+
+to run it in the background add & at the end
+and to kill it type fg in cli
+
+then we add ingress controller to connect the nginx ingress controller to the deployment service
+
+

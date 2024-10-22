@@ -40,7 +40,7 @@ services:
        depends_on:
          - postgres
        environment:
-         - SPRING_DATASOURCE_URL=jdbc:postgresql://4.180.6.234:5432/pcd
+         - SPRING_DATASOURCE_URL=jdbc:postgresql://127.0.0.1:5432/pcd
          - SPRING_DATASOURCE_USERNAME=khaled
          - SPRING_DATASOURCE_PASSWORD=1234
          - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
