@@ -1,6 +1,7 @@
 FROM maven:3.8.5-openjdk-17
 
 WORKDIR /jaava-app
+
 COPY . .
 
 ENV SPRING_DATASOURCE_URL jdbc:postgresql://4.180.6.234:5432/pcd
@@ -26,5 +27,7 @@ ENV SPRING_MAIL_PROPERTIES_MAIL_SMTP_WRITE_TIMEOUT 5000
 
 
 RUN mvn clean  -Dmaven.test.skip=true install
+
+
 
 CMD mvn spring-boot:run
