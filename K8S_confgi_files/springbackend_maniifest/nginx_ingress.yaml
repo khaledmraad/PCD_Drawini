@@ -13,7 +13,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: nginx-service
+            name: springbackend-service
             port:
-              number: 80
+              number: 8080
 

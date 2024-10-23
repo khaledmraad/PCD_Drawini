@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-backend
+  namespace: drawini
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: springboot-backend
+  template:
+    metadata:
+      labels:
+        app: springboot-backend
+    spec:
+      containers:
+      - name: springboot-backend
+        image: khaledmraadtn/backpain
+        ports:
+        - containerPort: 8081
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:postgresql://10.109.32.171:5432/pcd"
+

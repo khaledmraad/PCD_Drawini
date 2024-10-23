@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-service
+  name: springbackend-service
   namespace: drawini
 spec:
   type: ClusterIP
   selector:
-    app: nginx
+    app: springboot-backend
   ports:
   - protocol: TCP
     port: 8080
-    targetPort: 80
+    targetPort: 8081
