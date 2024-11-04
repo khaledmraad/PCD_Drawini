@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgresstatefulset
+  namespace: drawini
+spec:
+  serviceName: postgres-service
+  selector:
+    matchLabels:
+      app: postgresstatefulset
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgresstatefulset
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:latest
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - containerPort: 5432
+        envFrom:
+        - configMapRef:
+            name: postgresconfigmap
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: postgrespvclaim

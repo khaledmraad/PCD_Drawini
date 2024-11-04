@@ -1,14 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgres-vol # name of PVC essential for identifying the storage data
+  name: postgrespvclaim
   namespace: drawini
-  labels:
-    app: postgres-pv-claim
-    tier: database
 spec:
+  storageClassName: standard
   accessModes:
-  - ReadWriteOnce #This specifies the mode of the claim that we are trying to create.
+  - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi #This will tell kubernetes about the amount of space we are trying to claim.
+      storage: 1Gi

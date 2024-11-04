@@ -3,12 +3,11 @@ kind: Service
 metadata:
   name: postgres-service
   namespace: drawini
-  labels:
-    app: postgres-service
 spec:
-  ports:
-  - port: 5432
-    targetPort: 5432
   selector:
-    app: postgresdeployment
+    app: postgresstatefulset
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
   type: ClusterIP
