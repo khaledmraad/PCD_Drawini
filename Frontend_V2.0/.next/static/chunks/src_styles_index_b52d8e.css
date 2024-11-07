@@ -931,10 +931,6 @@ input#checkboxLabel:checked ~ .box span {
   --tw-bg-opacity: 1;
   background-color: rgb(18 23 35/ var(--tw-bg-opacity));
 }
-.bg-blue-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(59 130 246/ var(--tw-bg-opacity));
-}
 .bg-body-color {
   --tw-bg-opacity: 1;
   background-color: rgb(120 130 147/ var(--tw-bg-opacity));
