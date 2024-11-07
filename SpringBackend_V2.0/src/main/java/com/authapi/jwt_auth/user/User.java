@@ -10,12 +10,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(name = "users")
 public class User implements UserDetails {
 
@@ -70,4 +74,24 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
+
+    @ManyToMany(cascade = { 
+            CascadeType.PERSIST, 
+            CascadeType.MERGE
+    })
+    @JoinTable(
+            name = "users_projects_mapping",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id")
+    )
+    private Set<Projects> projects;
+
+    public Set<Projects> getProjects() { return projects; }
+
+    public void setProjects(Set<Projects> projects) { this.projects = projects; }
+
+    // public void addProject(Project project) {
+    //     this.projects.add(project);
+    // }
+
 }

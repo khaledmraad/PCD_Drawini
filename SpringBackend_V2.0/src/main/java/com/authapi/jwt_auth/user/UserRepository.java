@@ -13,6 +13,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findUserByPassword(String username);
 
+    Optional<User> findUserById(int id);
+
     @Transactional
     @Modifying
     @Query("UPDATE User a " +
