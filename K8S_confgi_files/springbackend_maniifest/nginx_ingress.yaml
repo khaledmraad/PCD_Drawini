@@ -4,9 +4,11 @@ kind: Ingress
 metadata:
   name: nginx-ingress
   namespace: drawini
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-  - host: drawini.local.com
+  - host: drawini.back.com
     http:
       paths:
       - path: /
@@ -16,4 +18,3 @@ spec:
             name: springbackend-service
             port:
               number: 8080
-

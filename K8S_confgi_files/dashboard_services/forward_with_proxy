@@ -1,0 +1,19 @@
+helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+
+helm upgrade --install kubernetes-dashboard \
+kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace \
+kubernetes-dashboard
+
+kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy
+8443:443
+
+https://localhost:8443
+
+
+kubectl create -f dashboard-serviceaccount.yml
+
+
+kubectl -n kubernetes-dashboard create token admin-user (in azure cli)
+
+kubectl -n kubernetes-dashboard delete serviceaccount admin-user kubectl -n
+kubernetes-dashboard delete clusterrolebinding admin-user

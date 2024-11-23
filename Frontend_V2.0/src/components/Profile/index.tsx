@@ -8,14 +8,19 @@ const ProfileContent = () => {
 
     const router = useRouter()
 
+    if (!localStorage.getItem("auth_token")) {
+        router.push("/signin");
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             console.log("done");
 
-            const url = 'http://localhost:8081/api/v1/verifie-token';
+            const url = 'http://192.168.1.16:8081/api/v1/verifie-token';
 
             const token = localStorage.getItem("auth_token");
-
+            console.log(token);
+            
             try {
                 const response = await axios.get(url, {
                     headers: {

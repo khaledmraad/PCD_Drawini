@@ -75,20 +75,20 @@ public class User implements UserDetails {
         return UserDetails.super.isEnabled();
     }
 
-    @ManyToMany(cascade = { 
-            CascadeType.PERSIST, 
-            CascadeType.MERGE
-    })
-    @JoinTable(
-            name = "users_projects_mapping",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id")
-    )
-    private Set<Projects> projects;
-
-    public Set<Projects> getProjects() { return projects; }
-
-    public void setProjects(Set<Projects> projects) { this.projects = projects; }
+    //    @ManyToMany(cascade = {
+    //            CascadeType.PERSIST,
+    //            CascadeType.MERGE
+    //    })
+    //    @JoinTable(
+    //            name = "users_projects_mapping",
+    //            joinColumns = @JoinColumn(name = "id"),
+    //            inverseJoinColumns = @JoinColumn(name = "project_id")
+    //    )
+    //    private Set<Projects> projects;
+    //
+    //    public Set<Projects> getProjects() { return projects; }
+    //
+    //    public void setProjects(Set<Projects> projects) { this.projects = projects; }
 
     // public void addProject(Project project) {
     //     this.projects.add(project);

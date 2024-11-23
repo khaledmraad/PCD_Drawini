@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
+    "@types/react-router-dom": "^5.3.3",
     "axios": "^1.7.2",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.1.0",

@@ -3,10 +3,11 @@
 import { useState, ChangeEvent, useEffect } from "react";
 import Link from "next/link";
 import axios from "axios";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import { googleLogout, GoogleLogin, useGoogleLogin } from "@react-oauth/google";
-import { TokenResponse } from "@react-oauth/google";
-import GoogleSignUp from "./Googlesignup";
+// import { GoogleOAuthProvider } from "@react-oauth/google";
+// import { googleLogout, GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+// import { TokenResponse } from "@react-oauth/google";
+// import GoogleSignUp from "./Googlesignup";
+import {useRouter} from 'next/navigation'
 
 export default function Signup() {
   type credData = {
@@ -25,6 +26,7 @@ export default function Signup() {
 
   const [validateEmail, setValidateEmail] = useState(false);
 
+
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const { value, name } = event.target;
     setloginForm((prevCred) => ({
@@ -33,15 +35,23 @@ export default function Signup() {
     }));
   }
 
+  const router = useRouter();
+
+  if (localStorage.getItem("auth_token")) {
+    router.push("/profile");
+  }
+
   async function btnSignup(
     event: React.FormEvent<HTMLFormElement>
   ): Promise<boolean> {
     event.preventDefault();
 
-    // const url = 'https://drawini.local.com/api/v1/auth/register';
-    const url = "http://127.0.0.1:8081/api/v1/auth/register";
+    const url = 'http://192.168.1.16:8081/api/v1/auth/register';
+    // const url = "https://drawini.back.com/api/v1/auth/register";
 
     const data = loginForm;
+
+
 
     try {
       const response = await axios.post(url, data, {
@@ -105,10 +115,10 @@ export default function Signup() {
                 </GoogleOAuthProvider> */}
 
 
-
+{/* 
                 <GoogleOAuthProvider clientId="709360497490-k1q067re8qqu3v6nb4idcd53ubkdgng2.apps.googleusercontent.com">
                   <GoogleSignUp onSignupSuccess={handleSignupSuccess}></GoogleSignUp>
-                </GoogleOAuthProvider>
+                </GoogleOAuthProvider> */}
 
 
                 {/* <button className="border-stroke dark:text-body-color-dark dark:shadow-two mb-6 flex w-full items-center justify-center rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">

@@ -2,10 +2,17 @@
 import { useState, ChangeEvent } from "react";
 import Link from "next/link";
 import axios from "axios";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import GoogleSignIn from "./Googlesignin";
+// import { GoogleOAuthProvider } from "@react-oauth/google";
+// import GoogleSignIn from "./Googlesignin";
+import { useRouter } from 'next/navigation'
+
+
 
 export default function Signin(){
+
+
+  const navigate = useRouter();
+
 
     type credData={
         email?: string,
@@ -28,12 +35,15 @@ export default function Signin(){
       )
     }
 
+    if (localStorage.getItem("auth_token")) {
+      navigate.push("/profile")
+    }
 
     async function btnSignup(event: React.FormEvent<HTMLFormElement>): Promise<boolean> {
         event.preventDefault();
 
-      // const url = 'https://drawini.local.com/api/v1/auth/authenticate';
-      const url = 'http://127.0.0.1:8081/api/v1/auth/authenticate';
+      const url = 'http://192.168.1.16:8081/api/v1/auth/authenticate';
+      // const url = 'https://drawini.back.com/api/v1/auth/authenticate';
 
         const data = loginForm;
         // console.log(data);
@@ -69,7 +79,7 @@ export default function Signin(){
             setErrorMessage("ur logged in");
             localStorage.setItem("auth_token",response.data["token"]);
 
-            
+            navigate.push("/profile")
             
           
 
@@ -115,10 +125,10 @@ export default function Signin(){
                       Login to your account for a faster checkout.
                     </p>
                     
-                    <GoogleOAuthProvider clientId="709360497490-k1q067re8qqu3v6nb4idcd53ubkdgng2.apps.googleusercontent.com">
+                    {/* <GoogleOAuthProvider clientId="709360497490-k1q067re8qqu3v6nb4idcd53ubkdgng2.apps.googleusercontent.com">
                       <GoogleSignIn onSignupSuccess={handleSigninSuccess}></GoogleSignIn>
                     </GoogleOAuthProvider>
-                   
+                    */}
                     <div className="mb-8 flex items-center justify-center">
                       <span className="hidden h-[1px] w-full max-w-[70px] bg-body-color/50 sm:block"></span>
                       <p className="w-full px-5 text-center text-base font-medium text-body-color">

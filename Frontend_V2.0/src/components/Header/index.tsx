@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
 import { MdOutlineLogin } from "react-icons/md";
+import { useRouter } from 'next/navigation'
+import { sign } from "crypto";
 
 
 const Header = () => {
@@ -14,6 +16,13 @@ const Header = () => {
   const navbarToggleHandler = () => {
     setNavbarOpen(!navbarOpen);
   };
+  
+  const router = useRouter()
+
+  const [signed,setSigned] = useState(false)
+
+  
+
 
   // Sticky Navbar
   const [sticky, setSticky] = useState(false);
@@ -26,8 +35,13 @@ const Header = () => {
   };
   useEffect(() => {
     window.addEventListener("scroll", handleStickyNavbar);
-  });
+    
+    if (localStorage.getItem("auth_token")) {
+      setSigned(true)
+    }
 
+  },[signed]);
+  
   // submenu handler
   const [openIndex, setOpenIndex] = useState(-1);
   const handleSubmenu = (index) => {
@@ -39,6 +53,12 @@ const Header = () => {
   };
 
   const usePathName = usePathname();
+
+  function handleLogout() {
+    localStorage.removeItem("auth_token");
+    router.push("/")
+  }
+
 
   return (
     <>
@@ -160,8 +180,19 @@ const Header = () => {
                   </ul>
                 </nav>
               </div>
+              {signed ? <div className="flex items-center justify-end pr-16 lg:pr-0">
+                
+                <Link
+                onClick={()=> handleLogout()}
+                  href="/"
+                  className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-sm bg-primary px-8 py-3 text-base font-medium text-white transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-6 xl:px-9"
+                >
+                  Logout
+                </Link>
+                  </ div> : 
+              
               <div className="flex items-center justify-end pr-16 lg:pr-0">
-              <Link
+                <Link
                   href="/signin"
                   className="hidden px-7 py-3 text-base font-medium text-dark hover:opacity-70 dark:text-white md:block"
                 >
@@ -172,7 +203,7 @@ const Header = () => {
                   href="/signin"
                   className=" px-7 py-3 text-base font-medium text-dark hover:opacity-70 dark:text-white md:block"
                 >
-                  <MdOutlineLogin size={'1.5em'}  />
+                  <MdOutlineLogin size={'1.5em'} className="none" />
 
                 </Link>
                 <Link
@@ -181,10 +212,11 @@ const Header = () => {
                 >
                   Sign Up
                 </Link>
+                </div>
+              }
                 <div>
                   <ThemeToggler />
                 </div>
-              </div>
             </div>
           </div>
         </div>
