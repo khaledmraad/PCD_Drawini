@@ -42,8 +42,8 @@ export default function Signin(){
     async function btnSignup(event: React.FormEvent<HTMLFormElement>): Promise<boolean> {
         event.preventDefault();
 
-      const url = 'http://192.168.1.16:8081/api/v1/auth/authenticate';
-      // const url = 'https://drawini.back.com/api/v1/auth/authenticate';
+      // const url = 'http://192.168.1.16:8081/api/v1/auth/authenticate';
+      const url = 'https://drawini.back.com/api/v1/auth/authenticate';
 
         const data = loginForm;
         // console.log(data);
