@@ -20,4 +20,4 @@ spec:
         - containerPort: 8081
         env:
         - name: SPRING_DATASOURCE_URL
-          value: "jdbc:postgresql://10.0.46.195:5432/pcd"
+          value: "jdbc:postgresql://10.244.0.214:5432/pcd"
