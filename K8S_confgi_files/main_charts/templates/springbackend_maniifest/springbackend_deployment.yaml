@@ -20,5 +20,5 @@ spec:
         - containerPort: 8081
         env:
         - name: SPRING_DATASOURCE_URL
-          value: { ? { .Value.db_url } }
-          # value: "jdbc:postgresql://10.244.0.214:5432/pcd"
+          value: 
+          value: "jdbc:postgresql://10.0.212.207:5432/pcd"

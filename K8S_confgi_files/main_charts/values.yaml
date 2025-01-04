@@ -1,0 +1,1 @@
+db_url: jdbc:postgresql://10.244.0.214:5432/pcd
