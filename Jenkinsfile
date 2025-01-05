@@ -1,11 +1,23 @@
 pipeline {
    agent any
    stages {
+      stage('clean workspace') {
+      steps {
+        cleanWs()
+      }
+    }
+
       stage('Checkout Code') {
          steps {
             checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/khaledmraad/PCD_Drawini.git']])
          }
-      
+      }  
+      stage('terraform') {
+      steps {
+        sh './terraform_installer_jenkins apply -auto-approve -no-color'
+      }
+    }
+
       stage('terraform version'){
       steps{
                   sh 'terraform --version'
@@ -14,7 +26,7 @@ pipeline {
       
    }
 }
-}
+
 
 // pipeline {
 //     agent any
