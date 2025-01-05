@@ -1,96 +1,97 @@
 pipeline {
-    agent any
-
-    tools{
-        maven 'M3'
-        git 'git'
-
-    }
-    environment {
-        SCANNER_HOME=tool 'sonar'
-    }
-
-
-    stages {
-        stage('clean workspace'){
-            steps{
-                cleanWs()
-            }
-        }
-        
-        
-        stage('cloning repo') {
-            steps {
-                git branch: 'main', url:'https://github.com/khaledmraad/PCD_Drawini.git'
-            }
-        }
-        
-        stage('trigger Frontend Pipeline') {
-            steps {
-                build job: "PCD_Drawini_fontend", wait: false
-            }
-        }
-
-        
-        stage('Package') {
-            steps {
-                sh 'cd SpringBackend_V2.0 && mvn package  -Dmaven.test.skip=true'    
-            }
-        }
-        
-        stage('SonarQube analysis') {
-            steps {
-                withSonarQubeEnv('sonar') {
-                    sh 'cd SpringBackend_V2.0 && mvn package -Dmaven.test.skip=true sonar:sonar -Dsonar.projectName="Drawini Spring Backend" '
-                }
-            }
-        }
-
-
-    //   stage("quality gate"){
-    //       steps {
-    //             script {
-    //                 waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube' 
-    //             }
-    //         } 
-    //     }
-
-
-        
-        stage('compile and test') {
-            steps {
-                sh script:'''
-                  #!/bin/bash
-                  cd SpringBackend_V2.0
-                  mvn -Dmaven.test.failure.ignore clean package
-                '''
-            }
-        }
-        
-        
-        stage('create docker image') {
-            steps {
-                sh script:'''
-                  #!/bin/bash
-                  pwd
-                  cd SpringBackend_V2.0
-                  docker build -t khaledmraadtn/drawini_spring_backend:latest -f ./Dockerfile2 .
-                '''
-            }
-        }
-        
-        stage('deploy to docker hub') {
-            steps {
-                script {
-                   withCredentials([usernamePassword(credentialsId: 'docker_cred', passwordVariable: 'password', usernameVariable: 'username')]) {
-                      sh "docker login -u ${username} -p ${password}"
-                      sh "docker push khaledmraadtn/drawini_spring_backend:latest "
-                   }
-                }
-            }
-        }
-        
-        
-    }
+   agent any
+   stages {
+      stage('Checkout Code') {
+         steps {
+            checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/khaledmraad/PCD_Drawini.git']])
+         }
+      
+      stage('terraform version'){
+      steps{
+                  sh 'terraform --version'
+      }
+      }
+      
+   }
+}
 }
 
+// pipeline {
+//     agent any
+//     environment {
+//         AWS_DEFAULT_REGION = 'your-aws-region'
+//     }
+//     stages {
+//         stage('Checkout Code') {
+//             steps {
+//                 checkout scm
+//             }
+//         }
+//         stage('Terraform Init') {
+//             steps {
+//                 script {
+//                     sh 'terraform init'
+//                 }
+//             }
+//         }
+//         stage('Terraform Plan') {
+//             steps {
+//                 script {
+//                     sh 'terraform plan -out=tfplan'
+//                 }
+//             }
+//         }
+//         stage('Terraform Apply') {
+//             steps {
+//                 script {
+//                     sh 'terraform apply -auto-approve tfplan'
+//                 }
+//             }
+//         }
+//         stage('Upload State to S3') {
+//             steps {
+//                 script {
+//                     sh '   -name'
+//                 }
+//             }
+//         }
+//     }
+//     post {
+//         always {
+//             cleanWs()
+//         }
+//     }
+// }
+
+
+
+
+// pipeline{
+//    agent any
+//    stages{
+//       stage('Compile and Test'){
+//          steps{
+//             git 'https://github.com/khaledmraad/PCD_Drawini.git'
+
+//             sh 'mvn clean install'
+
+//          }
+//       }
+//       stage('test'){
+//          steps{
+//             echo "testing"
+//          }
+//       }
+//       stage('deploy'){
+//          steps{
+//             script {
+//                withCredentials([usernamePassword(credentialsId: 'docker_cred', passwordVariable: 'password', usernameVariable: 'username')]) {
+//                   sh "docker login -u ${username} -p ${password}"
+//                   sh "docker push khaledmraad/pcd_drawini:latest "
+//                }
+//             }
+//             echo "deploying"
+//          }
+//       }
+//    }
+// }
