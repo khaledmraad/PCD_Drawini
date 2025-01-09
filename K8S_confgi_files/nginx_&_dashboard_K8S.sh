@@ -14,3 +14,7 @@ helm upgrade --install ingress-nginx ingress-nginx \
 
 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml
+
+kubectl create namespace drawini
+
+kubectl config set-context --current --namespace=drawini
