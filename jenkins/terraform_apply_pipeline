@@ -1,0 +1,22 @@
+pipeline {
+   agent any
+   stages {
+
+      stage('Checkout Code') {
+         steps {
+            checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/khaledmraad/PCD_Drawini.git']])
+         }
+      }  
+    stage('terraform init'){
+      steps{
+                  sh 'cd terraform && terraform init'
+      }
+      }
+      stage('terraform apply'){
+      steps{
+                  sh 'cd terraform && terraform apply --auto-approve'
+      }
+      }
+      
+   }
+}

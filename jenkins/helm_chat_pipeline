@@ -1,0 +1,35 @@
+pipeline {
+   agent any
+   stages {
+      stage('Checkout Code') {
+         steps {
+            checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/khaledmraad/PCD_Drawini.git']])
+         }
+      }
+      
+    stage('set K8S'){
+        steps 
+        {
+            sh 'az account set --subscription 62e994c5-446e-45c1-b283-d310c051240f'
+            sh 'az aks get-credentials --resource-group aks_is_shit --name op_cluster --overwrite-existing'
+            
+        }
+    }
+    
+     stage('setup dashboard & nginx'){
+        steps 
+        {
+            sh 'cd K8S_confgi_files && chmod +x "nginx_&_dashboard_K8S.sh" && ./"nginx_&_dashboard_K8S.sh" '
+            
+        }
+    }
+    
+
+      stage("install helm charts "){
+          steps{
+              sh 'cd K8S_confgi_files && kubectl config set-context --current --namespace=drawini && helm install test ./main_charts'
+          }
+      }
+      
+   }
+}
