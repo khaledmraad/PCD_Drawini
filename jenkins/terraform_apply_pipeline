@@ -1,4 +1,6 @@
-pipeline {
+terraform{
+   required_version = "= 0.12.24"
+   pipeline {
    agent any
    stages {
 
@@ -19,4 +21,5 @@ pipeline {
       }
       
    }
+}
 }
