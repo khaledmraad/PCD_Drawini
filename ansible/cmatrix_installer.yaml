@@ -1,0 +1,11 @@
+---
+- name: python broo 
+  hosts: all
+  become: true
+
+  tasks:
+    - name: install cmatrix
+      apt:
+        name: cmatrix
+        state: latest
+      become: true 

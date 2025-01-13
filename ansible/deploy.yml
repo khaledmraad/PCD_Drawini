@@ -1,0 +1,30 @@
+---
+- name: Deploy Nginx App
+  hosts: all
+  become: true
+
+
+  tasks:
+    #  - name: install pip3
+    #    apt: name=python3-pip state=present 
+
+    #  - name: install pre-requisites
+    #    pip:
+    #      name:
+    #        - openshift
+    #        - pyyaml
+    #        - kubernetes
+    - name: Create new deployment
+      kubernetes.core.k8s:
+        kubeconfig: /home/azureuser/.kube/config  
+        definition: "{{ lookup('file', 'nginx-deployment.yaml') }}"
+        state: present
+        namespace: drawini
+
+    - name: Create new service
+      kubernetes.core.k8s:
+        kubeconfig: /home/azureuser/.kube/config  
+        state: present
+        definition: "{{ lookup('file', 'nginx-service.yaml') }}"
+        namespace: drawini
+
