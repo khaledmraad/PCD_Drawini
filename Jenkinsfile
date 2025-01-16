@@ -1,104 +1,56 @@
 pipeline {
-   agent any
-   stages {
-      stage('Checkout Code') {
-         steps {
-            checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/khaledmraad/PCD_Drawini.git']])
-         }
-      }  
-      stage('terraform') {
-      steps {
-         sh 'chmod +x ./terraform_installer_jenkins'
-        sh './terraform_installer_jenkins apply -auto-approve -no-color'
-      }
+    agent any
+
+    stages {
+        
+        stage('terraform init') {
+            steps {
+                sh 'cd terraform && terraform init'
+            }
+        }
+        
+        stage('terraform apply') {
+            steps {
+                sh 'cd terraform && terraform apply --auto-approve'
+            }
+        }
+        
+
+        stage('trust me') {
+            steps {
+                script {
+                    sh 'echo "Running mkdir -p ~/.ssh"'
+                    sh 'mkdir -p ~/.ssh && echo "mkdir ran"'
+                    sh '''
+                        if [ ! -f ~/.ssh/known_hosts ]; then
+                          touch ~/.ssh/known_hosts && echo "known_hosts file created"
+                        fi
+                    '''
+                    sh 'echo "Running ssh-keyscan"'
+                    sh '''
+                        ssh-keyscan -H 10.224.0.4 >> ~/.ssh/known_hosts && echo "ssh-keyscan successful" || exit 0
+                    '''
+                    sh 'export ANSIBLE_HOST_KEY_CHECKING=False && echo "ANSIBLE_HOST_KEY_CHECKING set to False"'
+
+                     sh '''
+                        echo "Host *" >> ~/.ssh/config
+                        echo "    StrictHostKeyChecking no" >> ~/.ssh/config
+                        echo "    UserKnownHostsFile=/dev/null" >> ~/.ssh/config
+                    '''
+                }
+            }
+        }
+
+        stage('ansible') {
+            steps {
+                script {
+                    sh '''
+                        cd ansible
+                        echo "Running ansible-playbook"
+                        ansible-playbook -i inventory deploy.yml -e "jump_box_public_ip=$(cd ../terraform && terraform output jump_box_public_ip)"
+                    '''
+                }
+            }
+        }
     }
-
-      stage('terraform version'){
-      steps{
-                  sh 'terraform --version'
-      }
-      }
-      
-   }
 }
-
-
-// pipeline {
-//     agent any
-//     environment {
-//         AWS_DEFAULT_REGION = 'your-aws-region'
-//     }
-//     stages {
-//         stage('Checkout Code') {
-//             steps {
-//                 checkout scm
-//             }
-//         }
-//         stage('Terraform Init') {
-//             steps {
-//                 script {
-//                     sh 'terraform init'
-//                 }
-//             }
-//         }
-//         stage('Terraform Plan') {
-//             steps {
-//                 script {
-//                     sh 'terraform plan -out=tfplan'
-//                 }
-//             }
-//         }
-//         stage('Terraform Apply') {
-//             steps {
-//                 script {
-//                     sh 'terraform apply -auto-approve tfplan'
-//                 }
-//             }
-//         }
-//         stage('Upload State to S3') {
-//             steps {
-//                 script {
-//                     sh '   -name'
-//                 }
-//             }
-//         }
-//     }
-//     post {
-//         always {
-//             cleanWs()
-//         }
-//     }
-// }
-
-
-
-
-// pipeline{
-//    agent any
-//    stages{
-//       stage('Compile and Test'){
-//          steps{
-//             git 'https://github.com/khaledmraad/PCD_Drawini.git'
-
-//             sh 'mvn clean install'
-
-//          }
-//       }
-//       stage('test'){
-//          steps{
-//             echo "testing"
-//          }
-//       }
-//       stage('deploy'){
-//          steps{
-//             script {
-//                withCredentials([usernamePassword(credentialsId: 'docker_cred', passwordVariable: 'password', usernameVariable: 'username')]) {
-//                   sh "docker login -u ${username} -p ${password}"
-//                   sh "docker push khaledmraad/pcd_drawini:latest "
-//                }
-//             }
-//             echo "deploying"
-//          }
-//       }
-//    }
-// }
