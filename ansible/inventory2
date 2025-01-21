@@ -1,0 +1,8 @@
+[jump_box]
+{{ jump_box_public_ip }}
+
+[jump_box:vars]
+ansible_ssh_user=azureuser
+ansible_ssh_private_key_file=../terraform/aks-ssh-key.pem
+
+

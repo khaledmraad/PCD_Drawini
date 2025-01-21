@@ -1,0 +1,46 @@
+- hosts: aks_nodes
+  become: true
+  tasks:
+  - name: Check if frontend deployment exists
+    kubernetes.core.k8s_info:
+      kind: Deployment
+      namespace: drawini
+      name: frontend
+    register: frontend_deployment
+    ignore_errors: true
+
+  - name: Delete frontend deployment if it exists
+    kubernetes.core.k8s:
+      state: absent
+      kind: Deployment
+      name: frontend
+      namespace: drawini
+    when: frontend_deployment.resources | length > 0
+
+  - name: Create new frontend deployment
+    kubernetes.core.k8s:
+      state: present
+      src: /home/azureuser/PCD_Drawini/K8S_confgi_files/main_charts/templates/frontend_manifest/frontend_deployment.yaml
+      namespace: drawini
+
+  - name: Check if backnend deployment exists
+    kubernetes.core.k8s_info:
+      kind: Deployment
+      namespace: drawini
+      name: springboot-backend
+    register: backend_deployment
+    ignore_errors: true
+
+  - name: Delete backend deployment if it exists
+    kubernetes.core.k8s:
+      state: absent
+      kind: Deployment
+      name: springboot-backend
+      namespace: drawini
+    when: backend_deployment.resources | length > 0
+
+  - name: Create new backend deployment
+    kubernetes.core.k8s:
+      state: present
+      src: /home/azureuser/PCD_Drawini/K8S_confgi_files/main_charts/templates/springbackend_maniifest/springbackend_deployment.yaml
+      namespace: drawini

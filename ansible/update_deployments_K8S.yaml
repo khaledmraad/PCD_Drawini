@@ -1,0 +1,15 @@
+---
+- name: Install Helm chart
+  hosts: aks_nodes
+  become: yes
+  tasks:
+  - name: Clone the Git repository
+    git:
+      repo: https://github.com/khaledmraad/PCD_Drawini
+      dest: /home/azureuser/PCD_Drawini
+      clone: yes
+      update: yes
+  - name: Install Helm chart using Helm module
+    command:
+      cmd: helm install test ./main_charts
+      chdir: /home/azureuser/PCD_Drawini/K8S_confgi_files

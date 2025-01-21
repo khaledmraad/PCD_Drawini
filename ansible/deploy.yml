@@ -1,46 +1,63 @@
 ---
 - name: Deploy Nginx App
-  hosts: all
+  hosts: aks_nodes
   become: true
 
   tasks:
-  #  - name: Install Azure CLI
-  #    shell: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-  #
-  #  - name: Login to Azure with Service Principal
-  #    shell: az login --service-principal -u c66de3af-8c88-4226-b6f0-daa411034d06 -p secreet_bro --tenant 4d6797ed-5276-4363-8059-c825458f07ac
-  #
-  #  - name: Set Azure subscription
-  #    shell: az account set --subscription 62e994c5-446e-45c1-b283-d310c051240f
-  #
-  #  - name: Get AKS credentials
-  #    shell: az aks get-credentials --resource-group aks-resource-group --name my-aks-cluster --overwrite-existing
-  #
-  #  - name: install pip3
-  #    apt: name=python3-pip state=present
-  #
-  #  - name: install pre-requisites
-  #    pip:
-  #      name:
-  #      - openshift
-  #      - pyyaml
-  #      - kubernetes
-  #
+  - name: Install Azure CLI
+    shell: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+  - name: Login to Azure with Service Principal
+    shell: az login --service-principal -u c66de3af-8c88-4226-b6f0-daa411034d06 -p stil_secret --tenant 4d6797ed-5276-4363-8059-c825458f07ac
+
+  - name: Set Azure subscription
+    shell: az account set --subscription 62e994c5-446e-45c1-b283-d310c051240f
+
+  - name: Get AKS credentials
+    shell: az aks get-credentials --resource-group aks-resource-group --name my-aks-cluster --overwrite-existing
+
+  - name: install pip3
+    apt: name=python3-pip state=present
+
+  - name: install pre-requisites
+    pip:
+      name:
+      - openshift
+      - pyyaml
+      - kubernetes
+
+  - name: Download Helm command line tool
+    ansible.builtin.uri:
+      url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+      return_content: true
+    register: helm_installer
+
+  - name: Install Helm
+    ansible.builtin.command:
+      cmd: bash
+      stdin: "{{ helm_installer.content }}"
+      creates: /usr/local/bin/helm
+    environment:
+      DESIRED_VERSION: "{{ helm_version | default('') }}"
 
   - name: Create namespace
-    shell: kubectl create namespace drawini
+    kubernetes.core.k8s:
+      name: drawini
+      api_version: v1
+      kind: Namespace
+      state: present
     ignore_errors: yes
 
   - name: Create new deployment
     kubernetes.core.k8s:
       #      kubeconfig: /home/azureuser/.kube/config
       definition: "{{ lookup('file', 'nginx-deployment.yaml') }}"
-      state: present
+      state: absent
       namespace: drawini
 
   - name: Create new service
     kubernetes.core.k8s:
       #      kubeconfig: /home/azureuser/.kube/config
-      state: present
+      state: absent
       definition: "{{ lookup('file', 'nginx-service.yaml') }}"
       namespace: drawini
