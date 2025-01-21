@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: springboot-backend
-        image: khaledmraadtn/backpain
+        image: khaledmraad/backpain
         ports:
         - containerPort: 8081
         env:

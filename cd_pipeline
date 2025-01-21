@@ -1,0 +1,113 @@
+pipeline {
+    agent any
+
+    stages {
+        
+        stage('terraform init') {
+            steps {
+                sh 'cd terraform && terraform init'
+            }
+        }
+        
+        stage('terraform apply') {
+            steps {
+                sh 'cd terraform && terraform apply --auto-approve'
+            }
+        }
+        
+
+        stage('trust me') {
+            steps {
+                script {
+                    sh 'mkdir -p ~/.ssh && echo "mkdir ran"'
+                    sh '''
+                        if [ ! -f ~/.ssh/known_hosts ]; then
+                          touch ~/.ssh/known_hosts && echo "known_hosts file created"
+                        fi
+                    '''
+                    sh '''
+                        ssh-keyscan -H 10.224.0.4 >> ~/.ssh/known_hosts && echo "ssh-keyscan successful" || exit 0
+                    '''
+                    sh 'export ANSIBLE_HOST_KEY_CHECKING=False && echo "ANSIBLE_HOST_KEY_CHECKING set to False"'
+                     sh '''
+                        echo "Host *" >> ~/.ssh/config
+                        echo "    StrictHostKeyChecking no" >> ~/.ssh/config
+                        echo "    UserKnownHostsFile=/dev/null" >> ~/.ssh/config
+                    '''
+                }
+            }
+        }
+
+        stage('ansible') {
+            steps {
+                script {
+                    sh '''
+                        cd ansible
+                        echo "Running ansible-playbook"
+                        export JUMP_BOX_IP=$(cd ../terraform && terraform output jump_box_public_ip)
+                        sed -i "2s/.*/$JUMP_BOX_IP/" inventory
+                        ansible-playbook -i inventory deploy.yml -e "jump_box_public_ip=$(cd ../terraform && terraform output jump_box_public_ip)" 
+                    '''
+                }
+            }
+        }
+                stage('install docker in jumpBox ') {
+            steps {
+                script {
+                    sh '''
+                        cd ansible
+                       
+                        ansible-playbook -i inventory docker_install.yaml 
+                    '''
+                    
+                }
+            }
+        }
+        
+        stage('build docker') {
+            steps {
+                script {
+                def jumpBoxIP = sh(script: "cd terraform && terraform output jump_box_public_ip", returnStdout: true).trim()
+
+                withCredentials([usernamePassword(credentialsId: 'docker_cred', passwordVariable: 'password', usernameVariable: 'username')]) {
+           
+                def result = sh(script: """
+                
+                    ssh -i terraform/aks-ssh-key.pem azureuser@$jumpBoxIP << EOF
+                    
+                    git clone https://github.com/khaledmraad/PCD_Drawini
+                    
+                    cd ~/PCD_Drawini/Frontend_V2.0
+                    
+                    docker build -t khaledmraad/drawini_frontend:latest -f ./Dockerfile .
+                    
+                    cd ~/PCD_Drawini/SpringBackend_V2.0
+                    docker build -t khaledmraad/backpain:latest -f ./Dockerfile .
+                    
+                    docker login -u '${username}' -p '${password}'
+                    
+                    docker push khaledmraad/drawini_frontend:latest
+                    docker push khaledmraad/backpain:latest
+                    
+                    exit
+                    
+                    EOF
+                """, returnStdout: true).trim()
+                
+                echo "ssh outshit: ${result}"
+
+                    
+                }
+            }
+        }
+    }
+
+stage('install helm'){
+            steps{
+                sh 'cd ansible && ansible-playbook -i inventory update_deployments_K8S.yaml -e "jump_box_public_ip=$(cd ../terraform && terraform output jump_box_public_ip)" '
+
+            }
+        }
+
+}
+}

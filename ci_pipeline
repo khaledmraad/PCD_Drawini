@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+
+    stages {
+                stage('build docker') {
+            steps {
+                script {
+                def jumpBoxIP = sh(script: "cd terraform && terraform output jump_box_public_ip", returnStdout: true).trim()
+
+                withCredentials([usernamePassword(credentialsId: 'docker_cred', passwordVariable: 'password', usernameVariable: 'username')]) {
+           
+                def result = sh(script: """
+                
+                    ssh -i terraform/aks-ssh-key.pem azureuser@$jumpBoxIP << EOF
+                    
+                    git clone https://github.com/khaledmraad/PCD_Drawini
+                    
+                    cd ~/PCD_Drawini/Frontend_V2.0
+                    
+                    docker build -t khaledmraad/drawini_frontend:latest -f ./Dockerfile .
+                    echo ${username} 
+                    echo ${password}
+                    
+                    cd ~/PCD_Drawini/SpringBackend_V2.0
+                    docker build -t khaledmraad/backpain:latest -f ./Dockerfile .
+                    
+                    docker login -u '${username}' -p '${password}'
+                    
+                    docker push khaledmraad/drawini_frontend:latest
+                    docker push khaledmraad/backpain:latest
+                    
+                    exit
+                    
+                    EOF
+                """, returnStdout: true).trim()
+                
+                echo "ssh outshit: ${result}"
+
+                    
+                }
+            }
+        }
+    }
+    
+        stage('install helm'){
+            steps{
+                sh 'cd ansible && ansible-playbook -i inventory test_delete.yaml -e "jump_box_public_ip=$(cd ../terraform && terraform output jump_box_public_ip)" '
+
+            }
+        }
+
+}
+}
